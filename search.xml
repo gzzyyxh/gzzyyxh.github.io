@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>What&#39;s Maching Learning?</title>
+      <link href="2021/04/17/What-s-Maching-Learning/"/>
+      <url>2021/04/17/What-s-Maching-Learning/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>my first blog</title>
       <link href="2021/04/17/my-first-blog/"/>
       <url>2021/04/17/my-first-blog/</url>
@@ -17,7 +30,7 @@
     
     
     <entry>
-      <title>newpapername</title>
+      <title>Test</title>
       <link href="2021/04/17/newpapername/"/>
       <url>2021/04/17/newpapername/</url>
       
@@ -34,7 +47,7 @@
       <link href="2021/04/16/hello-world/"/>
       <url>2021/04/16/hello-world/</url>
       
-        <content type="html"><![CDATA[<p>搞了**的整整两天，我的个人blog终于能在云端访问了^^^^</p><p>After two fucking days, Lao Tzu’s personal blog is finally online, fuck</p>]]></content>
+        <content type="html"><![CDATA[<p>搞了**的整整两天，我的个人blog终于能在云端访问了^^^^</p><span id="more"></span><p>After two fucking days, Lao Tzu’s personal blog is finally online, fuck</p>]]></content>
       
       
       
