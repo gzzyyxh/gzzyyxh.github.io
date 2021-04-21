@@ -1,0 +1,1304 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/avatar.png">
+  <link rel="icon" href="/img/avatar.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="3.5-classifying-movie-reviews">
+  <meta name="author" content="游隼">
+  <meta name="keywords" content="">
+  
+  <title>DL with python-2 - 游隼</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"gzzyyxh.github.io","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":false,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>丰之余</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-comment"></i>
+                留言板
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="DL with python-2">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-04-22 00:58" pubdate>
+        2021年4月22日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.6k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      111
+       分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">DL with python-2</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：1 分钟前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>3.5-classifying-movie-reviews</p>
+<span id="more"></span>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> keras<br>keras.__version__<br></code></pre></td></tr></table></figure>
+<p>‘2.4.3’</p>
+<h1 id="Classifying-movie-reviews-a-binary-classification-example"><a href="#Classifying-movie-reviews-a-binary-classification-example" class="headerlink" title="Classifying movie reviews: a binary classification example"></a>Classifying movie reviews: a binary classification example</h1><p>This notebook contains the code samples found in Chapter 3, Section 5 of <a target="_blank" rel="noopener" href="https://www.manning.com/books/deep-learning-with-python?a_aid=keras&a_bid=76564dff">Deep Learning with Python</a>. Note that the original text features far more content, in particular further explanations and figures: in this notebook, you will only find source code and related comments.</p>
+<hr>
+<p>Two-class classification, or binary classification, may be the most widely applied kind of machine learning problem. In this example, we<br>will learn to classify movie reviews into “positive” reviews and “negative” reviews, just based on the text content of the reviews.</p>
+<h2 id="The-IMDB-dataset"><a href="#The-IMDB-dataset" class="headerlink" title="The IMDB dataset"></a>The IMDB dataset</h2><p>We’ll be working with “IMDB dataset”, a set of 50,000 highly-polarized reviews from the Internet Movie Database. They are split into 25,000<br>reviews for training and 25,000 reviews for testing, each set consisting in 50% negative and 50% positive reviews.</p>
+<p>Why do we have these two separate training and test sets? You should never test a machine learning model on the same data that you used to<br>train it! Just because a model performs well on its training data doesn’t mean that it will perform well on data it has never seen, and<br>what you actually care about is your model’s performance on new data (since you already know the labels of your training data – obviously<br>you don’t need your model to predict those). For instance, it is possible that your model could end up merely <em>memorizing</em> a mapping between<br>your training samples and their targets – which would be completely useless for the task of predicting targets for data never seen before.<br>We will go over this point in much more detail in the next chapter.</p>
+<p>Just like the MNIST dataset, the IMDB dataset comes packaged with Keras. It has already been preprocessed: the reviews (sequences of words)<br>have been turned into sequences of integers, where each integer stands for a specific word in a dictionary.</p>
+<p>The following code will load the dataset (when you run it for the first time, about 80MB of data will be downloaded to your machine):</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras.datasets <span class="hljs-keyword">import</span> imdb<br><br>(train_data, train_labels), (test_data, test_labels) = imdb.load_data(num_words=<span class="hljs-number">10000</span>)<br></code></pre></td></tr></table></figure>
+<p>The argument <code>num_words=10000</code> means that we will only keep the top 10,000 most frequently occurring words in the training data. Rare words<br>will be discarded. This allows us to work with vector data of manageable size.</p>
+<p>The variables <code>train_data</code> and <code>test_data</code> are lists of reviews, each review being a list of word indices (encoding a sequence of words).<br><code>train_labels</code> and <code>test_labels</code> are lists of 0s and 1s, where 0 stands for “negative” and 1 stands for “positive”:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">train_data[<span class="hljs-number">0</span>]<br></code></pre></td></tr></table></figure>
+<pre><code>[1,
+ 14,
+ 22,
+ 16,
+ 43,
+ 530,
+ 973,
+ 1622,
+ 1385,
+ 65,
+ 458,
+ 4468,
+ 66,
+ 3941,
+ 4,
+ 173,
+ 36,
+ 256,
+ 5,
+ 25,
+ 100,
+ 43,
+ 838,
+ 112,
+ 50,
+ 670,
+ 2,
+ 9,
+ 35,
+ 480,
+ 284,
+ 5,
+ 150,
+ 4,
+ 172,
+ 112,
+ 167,
+ 2,
+ 336,
+ 385,
+ 39,
+ 4,
+ 172,
+ 4536,
+ 1111,
+ 17,
+ 546,
+ 38,
+ 13,
+ 447,
+ 4,
+ 192,
+ 50,
+ 16,
+ 6,
+ 147,
+ 2025,
+ 19,
+ 14,
+ 22,
+ 4,
+ 1920,
+ 4613,
+ 469,
+ 4,
+ 22,
+ 71,
+ 87,
+ 12,
+ 16,
+ 43,
+ 530,
+ 38,
+ 76,
+ 15,
+ 13,
+ 1247,
+ 4,
+ 22,
+ 17,
+ 515,
+ 17,
+ 12,
+ 16,
+ 626,
+ 18,
+ 2,
+ 5,
+ 62,
+ 386,
+ 12,
+ 8,
+ 316,
+ 8,
+ 106,
+ 5,
+ 4,
+ 2223,
+ 5244,
+ 16,
+ 480,
+ 66,
+ 3785,
+ 33,
+ 4,
+ 130,
+ 12,
+ 16,
+ 38,
+ 619,
+ 5,
+ 25,
+ 124,
+ 51,
+ 36,
+ 135,
+ 48,
+ 25,
+ 1415,
+ 33,
+ 6,
+ 22,
+ 12,
+ 215,
+ 28,
+ 77,
+ 52,
+ 5,
+ 14,
+ 407,
+ 16,
+ 82,
+ 2,
+ 8,
+ 4,
+ 107,
+ 117,
+ 5952,
+ 15,
+ 256,
+ 4,
+ 2,
+ 7,
+ 3766,
+ 5,
+ 723,
+ 36,
+ 71,
+ 43,
+ 530,
+ 476,
+ 26,
+ 400,
+ 317,
+ 46,
+ 7,
+ 4,
+ 2,
+ 1029,
+ 13,
+ 104,
+ 88,
+ 4,
+ 381,
+ 15,
+ 297,
+ 98,
+ 32,
+ 2071,
+ 56,
+ 26,
+ 141,
+ 6,
+ 194,
+ 7486,
+ 18,
+ 4,
+ 226,
+ 22,
+ 21,
+ 134,
+ 476,
+ 26,
+ 480,
+ 5,
+ 144,
+ 30,
+ 5535,
+ 18,
+ 51,
+ 36,
+ 28,
+ 224,
+ 92,
+ 25,
+ 104,
+ 4,
+ 226,
+ 65,
+ 16,
+ 38,
+ 1334,
+ 88,
+ 12,
+ 16,
+ 283,
+ 5,
+ 16,
+ 4472,
+ 113,
+ 103,
+ 32,
+ 15,
+ 16,
+ 5345,
+ 19,
+ 178,
+ 32]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">train_labels[<span class="hljs-number">0</span>]<br></code></pre></td></tr></table></figure>
+<pre><code>1
+</code></pre>
+<p>Since we restricted ourselves to the top 10,000 most frequent words, no word index will exceed 10,000:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">max</span>([<span class="hljs-built_in">max</span>(sequence) <span class="hljs-keyword">for</span> sequence <span class="hljs-keyword">in</span> train_data])<br></code></pre></td></tr></table></figure>
+<pre><code>9999
+</code></pre>
+<p>For kicks, here’s how you can quickly decode one of these reviews back to English words:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># word_index is a dictionary mapping words to an integer index</span><br>word_index = imdb.get_word_index()<br><span class="hljs-comment"># We reverse it, mapping integer indices to words</span><br>reverse_word_index = <span class="hljs-built_in">dict</span>([(value, key) <span class="hljs-keyword">for</span> (key, value) <span class="hljs-keyword">in</span> word_index.items()])<br><span class="hljs-comment"># We decode the review; note that our indices were offset by 3</span><br><span class="hljs-comment"># because 0, 1 and 2 are reserved indices for &quot;padding&quot;, &quot;start of sequence&quot;, and &quot;unknown&quot;.</span><br>decoded_review = <span class="hljs-string">&#x27; &#x27;</span>.join([reverse_word_index.get(i - <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;?&#x27;</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> train_data[<span class="hljs-number">0</span>]])<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">decoded_review<br></code></pre></td></tr></table></figure>
+<pre><code>&quot;? this film was just brilliant casting location scenery story direction everyone&#39;s really suited the part they played and you could just imagine being there robert ? is an amazing actor and now the same being director ? father came from the same scottish island as myself so i loved the fact there was a real connection with this film the witty remarks throughout the film were great it was just brilliant so much that i bought the film as soon as it was released for ? and would recommend it to everyone to watch and the fly fishing was amazing really cried at the end it was so sad and you know what they say if you cry at a film it must have been good and this definitely was also ? to the two little boy&#39;s that played the ? of norman and paul they were just brilliant children are often left out of the ? list i think because the stars that play them all grown up are such a big profile for the whole film but these children are amazing and should be praised for what they have done don&#39;t you think the whole story was so lovely because it was true and was someone&#39;s life after all that was shared with us all&quot;
+</code></pre>
+<h2 id="Preparing-the-data"><a href="#Preparing-the-data" class="headerlink" title="Preparing the data"></a>Preparing the data</h2><p>We cannot feed lists of integers into a neural network. We have to turn our lists into tensors. There are two ways we could do that:</p>
+<ul>
+<li>We could pad our lists so that they all have the same length, and turn them into an integer tensor of shape <code>(samples, word_indices)</code>,<br>then use as first layer in our network a layer capable of handling such integer tensors (the <code>Embedding</code> layer, which we will cover in<br>detail later in the book).</li>
+<li>We could one-hot-encode our lists to turn them into vectors of 0s and 1s. Concretely, this would mean for instance turning the sequence<br><code>[3, 5]</code> into a 10,000-dimensional vector that would be all-zeros except for indices 3 and 5, which would be ones. Then we could use as<br>first layer in our network a <code>Dense</code> layer, capable of handling floating point vector data.</li>
+</ul>
+<p>We will go with the latter solution. Let’s vectorize our data, which we will do manually for maximum clarity:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">vectorize_sequences</span>(<span class="hljs-params">sequences, dimension=<span class="hljs-number">10000</span></span>):</span><br>    <span class="hljs-comment"># Create an all-zero matrix of shape (len(sequences), dimension)</span><br>    results = np.zeros((<span class="hljs-built_in">len</span>(sequences), dimension))<br>    <span class="hljs-keyword">for</span> i, sequence <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(sequences):<br>        results[i, sequence] = <span class="hljs-number">1.</span>  <span class="hljs-comment"># set specific indices of results[i] to 1s</span><br>    <span class="hljs-keyword">return</span> results<br><br><span class="hljs-comment"># Our vectorized training data</span><br>x_train = vectorize_sequences(train_data)<br><span class="hljs-comment"># Our vectorized test data</span><br>x_test = vectorize_sequences(test_data)<br></code></pre></td></tr></table></figure>
+
+<p>Here’s what our samples look like now:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">x_train[<span class="hljs-number">0</span>]<br></code></pre></td></tr></table></figure>
+<pre><code>array([0., 1., 1., ..., 0., 0., 0.])
+</code></pre>
+<p>We should also vectorize our labels, which is straightforward:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Our vectorized labels</span><br>y_train = np.asarray(train_labels).astype(<span class="hljs-string">&#x27;float32&#x27;</span>)<br>y_test = np.asarray(test_labels).astype(<span class="hljs-string">&#x27;float32&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>Now our data is ready to be fed into a neural network.</p>
+<h2 id="Building-our-network"><a href="#Building-our-network" class="headerlink" title="Building our network"></a>Building our network</h2><p>Our input data is simply vectors, and our labels are scalars (1s and 0s): this is the easiest setup you will ever encounter. A type of<br>network that performs well on such a problem would be a simple stack of fully-connected (<code>Dense</code>) layers with <code>relu</code> activations: <code>Dense(16,  activation=&#39;relu&#39;)</code></p>
+<p>The argument being passed to each <code>Dense</code> layer (16) is the number of “hidden units” of the layer. What’s a hidden unit? It’s a dimension<br>in the representation space of the layer. You may remember from the previous chapter that each such <code>Dense</code> layer with a <code>relu</code> activation implements<br>the following chain of tensor operations:</p>
+<p><code>output = relu(dot(W, input) + b)</code></p>
+<p>Having 16 hidden units means that the weight matrix <code>W</code> will have shape <code>(input_dimension, 16)</code>, i.e. the dot product with <code>W</code> will project the<br>input data onto a 16-dimensional representation space (and then we would add the bias vector <code>b</code> and apply the <code>relu</code> operation). You can<br>intuitively understand the dimensionality of your representation space as “how much freedom you are allowing the network to have when<br>learning internal representations”. Having more hidden units (a higher-dimensional representation space) allows your network to learn more<br>complex representations, but it makes your network more computationally expensive and may lead to learning unwanted patterns (patterns that<br>will improve performance on the training data but not on the test data).</p>
+<p>There are two key architecture decisions to be made about such stack of dense layers:</p>
+<ul>
+<li>How many layers to use.</li>
+<li>How many “hidden units” to chose for each layer.</li>
+</ul>
+<p>In the next chapter, you will learn formal principles to guide you in making these choices.<br>For the time being, you will have to trust us with the following architecture choice:<br>two intermediate layers with 16 hidden units each,<br>and a third layer which will output the scalar prediction regarding the sentiment of the current review.<br>The intermediate layers will use <code>relu</code> as their “activation function”,<br>and the final layer will use a sigmoid activation so as to output a probability<br>(a score between 0 and 1, indicating how likely the sample is to have the target “1”, i.e. how likely the review is to be positive).<br>A <code>relu</code> (rectified linear unit) is a function meant to zero-out negative values,<br>while a sigmoid “squashes” arbitrary values into the <code>[0, 1]</code> interval, thus outputting something that can be interpreted as a probability.</p>
+<p>Here’s what our network looks like:</p>
+<p><img src="https://s3.amazonaws.com/book.keras.io/img/ch3/3_layer_network.png" srcset="/img/loading.gif" lazyload alt="3-layer network"></p>
+<p>And here’s the Keras implementation, very similar to the MNIST example you saw previously:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> models<br><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> layers<br><br>model = models.Sequential()<br>model.add(layers.Dense(<span class="hljs-number">16</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>, input_shape=(<span class="hljs-number">10000</span>,)))<br>model.add(layers.Dense(<span class="hljs-number">16</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>model.add(layers.Dense(<span class="hljs-number">1</span>, activation=<span class="hljs-string">&#x27;sigmoid&#x27;</span>))<br></code></pre></td></tr></table></figure>
+<p>Lastly, we need to pick a loss function and an optimizer. Since we are facing a binary classification problem and the output of our network<br>is a probability (we end our network with a single-unit layer with a sigmoid activation), is it best to use the <code>binary_crossentropy</code> loss.<br>It isn’t the only viable choice: you could use, for instance, <code>mean_squared_error</code>. But crossentropy is usually the best choice when you<br>are dealing with models that output probabilities. Crossentropy is a quantity from the field of Information Theory, that measures the “distance”<br>between probability distributions, or in our case, between the ground-truth distribution and our predictions.</p>
+<p>Here’s the step where we configure our model with the <code>rmsprop</code> optimizer and the <code>binary_crossentropy</code> loss function. Note that we will<br>also monitor accuracy during training.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">model.<span class="hljs-built_in">compile</span>(optimizer=<span class="hljs-string">&#x27;rmsprop&#x27;</span>,<br>              loss=<span class="hljs-string">&#x27;binary_crossentropy&#x27;</span>,<br>              metrics=[<span class="hljs-string">&#x27;accuracy&#x27;</span>])<br></code></pre></td></tr></table></figure>
+<p>We are passing our optimizer, loss function and metrics as strings, which is possible because <code>rmsprop</code>, <code>binary_crossentropy</code> and<br><code>accuracy</code> are packaged as part of Keras. Sometimes you may want to configure the parameters of your optimizer, or pass a custom loss<br>function or metric function. This former can be done by passing an optimizer class instance as the <code>optimizer</code> argument:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> optimizers<br><br>model.<span class="hljs-built_in">compile</span>(optimizer=optimizers.RMSprop(lr=<span class="hljs-number">0.001</span>),<br>              loss=<span class="hljs-string">&#x27;binary_crossentropy&#x27;</span>,<br>              metrics=[<span class="hljs-string">&#x27;accuracy&#x27;</span>])<br></code></pre></td></tr></table></figure>
+<p>The latter can be done by passing function objects as the <code>loss</code> or <code>metrics</code> arguments:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> losses<br><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> metrics<br><br>model.<span class="hljs-built_in">compile</span>(optimizer=optimizers.RMSprop(lr=<span class="hljs-number">0.001</span>),<br>              loss=losses.binary_crossentropy,<br>              metrics=[metrics.binary_accuracy])<br></code></pre></td></tr></table></figure>
+<h2 id="Validating-our-approach"><a href="#Validating-our-approach" class="headerlink" title="Validating our approach"></a>Validating our approach</h2><p>In order to monitor during training the accuracy of the model on data that it has never seen before, we will create a “validation set” by<br>setting apart 10,000 samples from the original training data:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">x_val = x_train[:<span class="hljs-number">10000</span>]<br>partial_x_train = x_train[<span class="hljs-number">10000</span>:]<br><br>y_val = y_train[:<span class="hljs-number">10000</span>]<br>partial_y_train = y_train[<span class="hljs-number">10000</span>:]<br></code></pre></td></tr></table></figure>
+<p>We will now train our model for 20 epochs (20 iterations over all samples in the <code>x_train</code> and <code>y_train</code> tensors), in mini-batches of 512<br>samples. At this same time we will monitor loss and accuracy on the 10,000 samples that we set apart. This is done by passing the<br>validation data as the <code>validation_data</code> argument:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">history = model.fit(partial_x_train,<br>                    partial_y_train,<br>                    epochs=<span class="hljs-number">20</span>,<br>                    batch_size=<span class="hljs-number">512</span>,<br>                    validation_data=(x_val, y_val))<br></code></pre></td></tr></table></figure>
+<pre><code>---------------------------------------------------------------------------
+
+MemoryError                               Traceback (most recent call last)
+
+&lt;ipython-input-20-90a50ee7d258&gt; in &lt;module&gt;
+----&gt; 1 history = model.fit(partial_x_train,
+      2                     partial_y_train,
+      3                     epochs=20,
+      4                     batch_size=512,
+      5                     validation_data=(x_val, y_val))
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\training.py in fit(self, x, y, batch_size, epochs, verbose, callbacks, validation_split, validation_data, shuffle, class_weight, sample_weight, initial_epoch, steps_per_epoch, validation_steps, validation_batch_size, validation_freq, max_queue_size, workers, use_multiprocessing)
+   1048          training_utils.RespectCompiledTrainableState(self):
+   1049       # Creates a `tf.data.Dataset` and handles batch and epoch iteration.
+-&gt; 1050       data_handler = data_adapter.DataHandler(
+   1051           x=x,
+   1052           y=y,
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\data_adapter.py in __init__(self, x, y, sample_weight, batch_size, steps_per_epoch, initial_epoch, epochs, shuffle, class_weight, max_queue_size, workers, use_multiprocessing, model, steps_per_execution)
+   1098
+   1099     adapter_cls = select_data_adapter(x, y)
+-&gt; 1100     self._adapter = adapter_cls(
+   1101         x,
+   1102         y,
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\data_adapter.py in __init__(self, x, y, sample_weights, sample_weight_modes, batch_size, epochs, steps, shuffle, **kwargs)
+    261                **kwargs):
+    262     super(TensorLikeDataAdapter, self).__init__(x, y, **kwargs)
+--&gt; 263     x, y, sample_weights = _process_tensorlike((x, y, sample_weights))
+    264     sample_weight_modes = broadcast_sample_weight_modes(
+    265         sample_weights, sample_weight_modes)
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\data_adapter.py in _process_tensorlike(inputs)
+   1014     return x
+   1015
+-&gt; 1016   inputs = nest.map_structure(_convert_numpy_and_scipy, inputs)
+   1017   return nest.list_to_tuple(inputs)
+   1018
+
+D:\anaconda3\lib\site-packages\tensorflow\python\util\nest.py in map_structure(func, *structure, **kwargs)
+    657
+    658   return pack_sequence_as(
+--&gt; 659       structure[0], [func(*x) for x in entries],
+    660       expand_composites=expand_composites)
+    661
+
+D:\anaconda3\lib\site-packages\tensorflow\python\util\nest.py in &lt;listcomp&gt;(.0)
+    657
+    658   return pack_sequence_as(
+--&gt; 659       structure[0], [func(*x) for x in entries],
+    660       expand_composites=expand_composites)
+    661
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\data_adapter.py in _convert_numpy_and_scipy(x)
+   1009       if issubclass(x.dtype.type, np.floating):
+   1010         dtype = backend.floatx()
+-&gt; 1011       return ops.convert_to_tensor_v2_with_dispatch(x, dtype=dtype)
+   1012     elif scipy_sparse and scipy_sparse.issparse(x):
+   1013       return _scipy_sparse_to_sparse_tensor(x)
+
+D:\anaconda3\lib\site-packages\tensorflow\python\util\dispatch.py in wrapper(*args, **kwargs)
+    199     &quot;&quot;&quot;Call target, and fall back on dispatchers if there is a TypeError.&quot;&quot;&quot;
+    200     try:
+--&gt; 201       return target(*args, **kwargs)
+    202     except (TypeError, ValueError):
+    203       # Note: convert_to_eager_tensor currently raises a ValueError, not a
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\ops.py in convert_to_tensor_v2_with_dispatch(value, dtype, dtype_hint, name)
+   1402     ValueError: If the `value` is a tensor not of given `dtype` in graph mode.
+   1403   &quot;&quot;&quot;
+-&gt; 1404   return convert_to_tensor_v2(
+   1405       value, dtype=dtype, dtype_hint=dtype_hint, name=name)
+   1406
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\ops.py in convert_to_tensor_v2(value, dtype, dtype_hint, name)
+   1408 def convert_to_tensor_v2(value, dtype=None, dtype_hint=None, name=None):
+   1409   &quot;&quot;&quot;Converts the given `value` to a `Tensor`.&quot;&quot;&quot;
+-&gt; 1410   return convert_to_tensor(
+   1411       value=value,
+   1412       dtype=dtype,
+
+D:\anaconda3\lib\site-packages\tensorflow\python\profiler\trace.py in wrapped(*args, **kwargs)
+    161         with Trace(trace_name, **trace_kwargs):
+    162           return func(*args, **kwargs)
+--&gt; 163       return func(*args, **kwargs)
+    164
+    165     return wrapped
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\ops.py in convert_to_tensor(value, dtype, name, as_ref, preferred_dtype, dtype_hint, ctx, accepted_result_types)
+   1538
+   1539     if ret is None:
+-&gt; 1540       ret = conversion_func(value, dtype=dtype, name=name, as_ref=as_ref)
+   1541
+   1542     if ret is NotImplemented:
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\tensor_conversion_registry.py in _default_conversion_function(***failed resolving arguments***)
+     50 def _default_conversion_function(value, dtype, name, as_ref):
+     51   del as_ref  # Unused.
+---&gt; 52   return constant_op.constant(value, dtype, name=name)
+     53
+     54
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\constant_op.py in constant(value, dtype, shape, name)
+    262     ValueError: if called on a symbolic tensor.
+    263   &quot;&quot;&quot;
+--&gt; 264   return _constant_impl(value, dtype, shape, name, verify_shape=False,
+    265                         allow_broadcast=True)
+    266
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\constant_op.py in _constant_impl(value, dtype, shape, name, verify_shape, allow_broadcast)
+    274       with trace.Trace(&quot;tf.constant&quot;):
+    275         return _constant_eager_impl(ctx, value, dtype, shape, verify_shape)
+--&gt; 276     return _constant_eager_impl(ctx, value, dtype, shape, verify_shape)
+    277
+    278   g = ops.get_default_graph()
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\constant_op.py in _constant_eager_impl(ctx, value, dtype, shape, verify_shape)
+    299 def _constant_eager_impl(ctx, value, dtype, shape, verify_shape):
+    300   &quot;&quot;&quot;Implementation of eager constant.&quot;&quot;&quot;
+--&gt; 301   t = convert_to_eager_tensor(value, ctx, dtype)
+    302   if shape is None:
+    303     return t
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\constant_op.py in convert_to_eager_tensor(value, ctx, dtype)
+     96       dtype = dtypes.as_dtype(dtype).as_datatype_enum
+     97   ctx.ensure_initialized()
+---&gt; 98   return ops.EagerTensor(value, ctx.device_name, dtype)
+     99
+    100
+
+MemoryError: Unable to allocate 572. MiB for an array with shape (15000, 10000) and data type float32
+</code></pre>
+<p>On CPU, this will take less than two seconds per epoch – training is over in 20 seconds. At the end of every epoch, there is a slight pause<br>as the model computes its loss and accuracy on the 10,000 samples of the validation data.</p>
+<p>Note that the call to <code>model.fit()</code> returns a <code>History</code> object. This object has a member <code>history</code>, which is a dictionary containing data<br>about everything that happened during training. Let’s take a look at it:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">history_dict = history.history<br>history_dict.keys()<br></code></pre></td></tr></table></figure>
+<pre><code>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-21-fc51a3f187a7&gt; in &lt;module&gt;
+----&gt; 1 history_dict = history.history
+      2 history_dict.keys()
+
+NameError: name &#39;history&#39; is not defined
+</code></pre>
+<p>It contains 4 entries: one per metric that was being monitored, during training and during validation. Let’s use Matplotlib to plot the<br>training and validation loss side by side, as well as the training and validation accuracy:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><br>acc = history.history[<span class="hljs-string">&#x27;acc&#x27;</span>]<br>val_acc = history.history[<span class="hljs-string">&#x27;val_acc&#x27;</span>]<br>loss = history.history[<span class="hljs-string">&#x27;loss&#x27;</span>]<br>val_loss = history.history[<span class="hljs-string">&#x27;val_loss&#x27;</span>]<br><br>epochs = <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-built_in">len</span>(acc) + <span class="hljs-number">1</span>)<br><br><span class="hljs-comment"># &quot;bo&quot; is for &quot;blue dot&quot;</span><br>plt.plot(epochs, loss, <span class="hljs-string">&#x27;bo&#x27;</span>, label=<span class="hljs-string">&#x27;Training loss&#x27;</span>)<br><span class="hljs-comment"># b is for &quot;solid blue line&quot;</span><br>plt.plot(epochs, val_loss, <span class="hljs-string">&#x27;b&#x27;</span>, label=<span class="hljs-string">&#x27;Validation loss&#x27;</span>)<br>plt.title(<span class="hljs-string">&#x27;Training and validation loss&#x27;</span>)<br>plt.xlabel(<span class="hljs-string">&#x27;Epochs&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;Loss&#x27;</span>)<br>plt.legend()<br><br>plt.show()<br></code></pre></td></tr></table></figure>
+<pre><code>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-22-fa6555deaae9&gt; in &lt;module&gt;
+      1 import matplotlib.pyplot as plt
+      2
+----&gt; 3 acc = history.history[&#39;acc&#39;]
+      4 val_acc = history.history[&#39;val_acc&#39;]
+      5 loss = history.history[&#39;loss&#39;]
+
+NameError: name &#39;history&#39; is not defined
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python">plt.clf()   <span class="hljs-comment"># clear figure</span><br>acc_values = history_dict[<span class="hljs-string">&#x27;acc&#x27;</span>]<br>val_acc_values = history_dict[<span class="hljs-string">&#x27;val_acc&#x27;</span>]<br><br>plt.plot(epochs, acc, <span class="hljs-string">&#x27;bo&#x27;</span>, label=<span class="hljs-string">&#x27;Training acc&#x27;</span>)<br>plt.plot(epochs, val_acc, <span class="hljs-string">&#x27;b&#x27;</span>, label=<span class="hljs-string">&#x27;Validation acc&#x27;</span>)<br>plt.title(<span class="hljs-string">&#x27;Training and validation accuracy&#x27;</span>)<br>plt.xlabel(<span class="hljs-string">&#x27;Epochs&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;Loss&#x27;</span>)<br>plt.legend()<br><br>plt.show()<br></code></pre></td></tr></table></figure>
+<pre><code>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-23-cc3500a51e0d&gt; in &lt;module&gt;
+      1 plt.clf()   # clear figure
+----&gt; 2 acc_values = history_dict[&#39;acc&#39;]
+      3 val_acc_values = history_dict[&#39;val_acc&#39;]
+      4
+      5 plt.plot(epochs, acc, &#39;bo&#39;, label=&#39;Training acc&#39;)
+
+NameError: name &#39;history_dict&#39; is not defined
+
+&lt;Figure size 432x288 with 0 Axes&gt;
+</code></pre>
+<p>The dots are the training loss and accuracy, while the solid lines are the validation loss and accuracy. Note that your own results may vary<br>slightly due to a different random initialization of your network.</p>
+<p>As you can see, the training loss decreases with every epoch and the training accuracy increases with every epoch. That’s what you would<br>expect when running gradient descent optimization – the quantity you are trying to minimize should get lower with every iteration. But that<br>isn’t the case for the validation loss and accuracy: they seem to peak at the fourth epoch. This is an example of what we were warning<br>against earlier: a model that performs better on the training data isn’t necessarily a model that will do better on data it has never seen<br>before. In precise terms, what you are seeing is “overfitting”: after the second epoch, we are over-optimizing on the training data, and we<br>ended up learning representations that are specific to the training data and do not generalize to data outside of the training set.</p>
+<p>In this case, to prevent overfitting, we could simply stop training after three epochs. In general, there is a range of techniques you can<br>leverage to mitigate overfitting, which we will cover in the next chapter.</p>
+<p>Let’s train a new network from scratch for four epochs, then evaluate it on our test data:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python">model = models.Sequential()<br>model.add(layers.Dense(<span class="hljs-number">16</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>, input_shape=(<span class="hljs-number">10000</span>,)))<br>model.add(layers.Dense(<span class="hljs-number">16</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>model.add(layers.Dense(<span class="hljs-number">1</span>, activation=<span class="hljs-string">&#x27;sigmoid&#x27;</span>))<br><br>model.<span class="hljs-built_in">compile</span>(optimizer=<span class="hljs-string">&#x27;rmsprop&#x27;</span>,<br>              loss=<span class="hljs-string">&#x27;binary_crossentropy&#x27;</span>,<br>              metrics=[<span class="hljs-string">&#x27;accuracy&#x27;</span>])<br><br>model.fit(x_train, y_train, epochs=<span class="hljs-number">4</span>, batch_size=<span class="hljs-number">512</span>)<br>results = model.evaluate(x_test, y_test)<br></code></pre></td></tr></table></figure>
+<pre><code>---------------------------------------------------------------------------
+
+MemoryError                               Traceback (most recent call last)
+
+&lt;ipython-input-24-82373714f0fe&gt; in &lt;module&gt;
+      8               metrics=[&#39;accuracy&#39;])
+      9
+---&gt; 10 model.fit(x_train, y_train, epochs=4, batch_size=512)
+     11 results = model.evaluate(x_test, y_test)
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\training.py in fit(self, x, y, batch_size, epochs, verbose, callbacks, validation_split, validation_data, shuffle, class_weight, sample_weight, initial_epoch, steps_per_epoch, validation_steps, validation_batch_size, validation_freq, max_queue_size, workers, use_multiprocessing)
+   1048          training_utils.RespectCompiledTrainableState(self):
+   1049       # Creates a `tf.data.Dataset` and handles batch and epoch iteration.
+-&gt; 1050       data_handler = data_adapter.DataHandler(
+   1051           x=x,
+   1052           y=y,
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\data_adapter.py in __init__(self, x, y, sample_weight, batch_size, steps_per_epoch, initial_epoch, epochs, shuffle, class_weight, max_queue_size, workers, use_multiprocessing, model, steps_per_execution)
+   1098
+   1099     adapter_cls = select_data_adapter(x, y)
+-&gt; 1100     self._adapter = adapter_cls(
+   1101         x,
+   1102         y,
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\data_adapter.py in __init__(self, x, y, sample_weights, sample_weight_modes, batch_size, epochs, steps, shuffle, **kwargs)
+    261                **kwargs):
+    262     super(TensorLikeDataAdapter, self).__init__(x, y, **kwargs)
+--&gt; 263     x, y, sample_weights = _process_tensorlike((x, y, sample_weights))
+    264     sample_weight_modes = broadcast_sample_weight_modes(
+    265         sample_weights, sample_weight_modes)
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\data_adapter.py in _process_tensorlike(inputs)
+   1014     return x
+   1015
+-&gt; 1016   inputs = nest.map_structure(_convert_numpy_and_scipy, inputs)
+   1017   return nest.list_to_tuple(inputs)
+   1018
+
+D:\anaconda3\lib\site-packages\tensorflow\python\util\nest.py in map_structure(func, *structure, **kwargs)
+    657
+    658   return pack_sequence_as(
+--&gt; 659       structure[0], [func(*x) for x in entries],
+    660       expand_composites=expand_composites)
+    661
+
+D:\anaconda3\lib\site-packages\tensorflow\python\util\nest.py in &lt;listcomp&gt;(.0)
+    657
+    658   return pack_sequence_as(
+--&gt; 659       structure[0], [func(*x) for x in entries],
+    660       expand_composites=expand_composites)
+    661
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\data_adapter.py in _convert_numpy_and_scipy(x)
+   1009       if issubclass(x.dtype.type, np.floating):
+   1010         dtype = backend.floatx()
+-&gt; 1011       return ops.convert_to_tensor_v2_with_dispatch(x, dtype=dtype)
+   1012     elif scipy_sparse and scipy_sparse.issparse(x):
+   1013       return _scipy_sparse_to_sparse_tensor(x)
+
+D:\anaconda3\lib\site-packages\tensorflow\python\util\dispatch.py in wrapper(*args, **kwargs)
+    199     &quot;&quot;&quot;Call target, and fall back on dispatchers if there is a TypeError.&quot;&quot;&quot;
+    200     try:
+--&gt; 201       return target(*args, **kwargs)
+    202     except (TypeError, ValueError):
+    203       # Note: convert_to_eager_tensor currently raises a ValueError, not a
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\ops.py in convert_to_tensor_v2_with_dispatch(value, dtype, dtype_hint, name)
+   1402     ValueError: If the `value` is a tensor not of given `dtype` in graph mode.
+   1403   &quot;&quot;&quot;
+-&gt; 1404   return convert_to_tensor_v2(
+   1405       value, dtype=dtype, dtype_hint=dtype_hint, name=name)
+   1406
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\ops.py in convert_to_tensor_v2(value, dtype, dtype_hint, name)
+   1408 def convert_to_tensor_v2(value, dtype=None, dtype_hint=None, name=None):
+   1409   &quot;&quot;&quot;Converts the given `value` to a `Tensor`.&quot;&quot;&quot;
+-&gt; 1410   return convert_to_tensor(
+   1411       value=value,
+   1412       dtype=dtype,
+
+D:\anaconda3\lib\site-packages\tensorflow\python\profiler\trace.py in wrapped(*args, **kwargs)
+    161         with Trace(trace_name, **trace_kwargs):
+    162           return func(*args, **kwargs)
+--&gt; 163       return func(*args, **kwargs)
+    164
+    165     return wrapped
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\ops.py in convert_to_tensor(value, dtype, name, as_ref, preferred_dtype, dtype_hint, ctx, accepted_result_types)
+   1538
+   1539     if ret is None:
+-&gt; 1540       ret = conversion_func(value, dtype=dtype, name=name, as_ref=as_ref)
+   1541
+   1542     if ret is NotImplemented:
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\tensor_conversion_registry.py in _default_conversion_function(***failed resolving arguments***)
+     50 def _default_conversion_function(value, dtype, name, as_ref):
+     51   del as_ref  # Unused.
+---&gt; 52   return constant_op.constant(value, dtype, name=name)
+     53
+     54
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\constant_op.py in constant(value, dtype, shape, name)
+    262     ValueError: if called on a symbolic tensor.
+    263   &quot;&quot;&quot;
+--&gt; 264   return _constant_impl(value, dtype, shape, name, verify_shape=False,
+    265                         allow_broadcast=True)
+    266
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\constant_op.py in _constant_impl(value, dtype, shape, name, verify_shape, allow_broadcast)
+    274       with trace.Trace(&quot;tf.constant&quot;):
+    275         return _constant_eager_impl(ctx, value, dtype, shape, verify_shape)
+--&gt; 276     return _constant_eager_impl(ctx, value, dtype, shape, verify_shape)
+    277
+    278   g = ops.get_default_graph()
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\constant_op.py in _constant_eager_impl(ctx, value, dtype, shape, verify_shape)
+    299 def _constant_eager_impl(ctx, value, dtype, shape, verify_shape):
+    300   &quot;&quot;&quot;Implementation of eager constant.&quot;&quot;&quot;
+--&gt; 301   t = convert_to_eager_tensor(value, ctx, dtype)
+    302   if shape is None:
+    303     return t
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\constant_op.py in convert_to_eager_tensor(value, ctx, dtype)
+     96       dtype = dtypes.as_dtype(dtype).as_datatype_enum
+     97   ctx.ensure_initialized()
+---&gt; 98   return ops.EagerTensor(value, ctx.device_name, dtype)
+     99
+    100
+
+MemoryError: Unable to allocate 954. MiB for an array with shape (25000, 10000) and data type float32
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">results<br></code></pre></td></tr></table></figure>
+<pre><code>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-25-100f62972f2f&gt; in &lt;module&gt;
+----&gt; 1 results
+
+NameError: name &#39;results&#39; is not defined
+</code></pre>
+<p>Our fairly naive approach achieves an accuracy of 88%. With state-of-the-art approaches, one should be able to get close to 95%.</p>
+<h2 id="Using-a-trained-network-to-generate-predictions-on-new-data"><a href="#Using-a-trained-network-to-generate-predictions-on-new-data" class="headerlink" title="Using a trained network to generate predictions on new data"></a>Using a trained network to generate predictions on new data</h2><p>After having trained a network, you will want to use it in a practical setting. You can generate the likelihood of reviews being positive<br>by using the <code>predict</code> method:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">model.predict(x_test)<br></code></pre></td></tr></table></figure>
+<pre><code>---------------------------------------------------------------------------
+
+MemoryError                               Traceback (most recent call last)
+
+&lt;ipython-input-26-a556f0421074&gt; in &lt;module&gt;
+----&gt; 1 model.predict(x_test)
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\training.py in predict(self, x, batch_size, verbose, steps, callbacks, max_queue_size, workers, use_multiprocessing)
+   1596                         &#39;. Consider setting it to AutoShardPolicy.DATA.&#39;)
+   1597
+-&gt; 1598       data_handler = data_adapter.DataHandler(
+   1599           x=x,
+   1600           batch_size=batch_size,
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\data_adapter.py in __init__(self, x, y, sample_weight, batch_size, steps_per_epoch, initial_epoch, epochs, shuffle, class_weight, max_queue_size, workers, use_multiprocessing, model, steps_per_execution)
+   1098
+   1099     adapter_cls = select_data_adapter(x, y)
+-&gt; 1100     self._adapter = adapter_cls(
+   1101         x,
+   1102         y,
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\data_adapter.py in __init__(self, x, y, sample_weights, sample_weight_modes, batch_size, epochs, steps, shuffle, **kwargs)
+    261                **kwargs):
+    262     super(TensorLikeDataAdapter, self).__init__(x, y, **kwargs)
+--&gt; 263     x, y, sample_weights = _process_tensorlike((x, y, sample_weights))
+    264     sample_weight_modes = broadcast_sample_weight_modes(
+    265         sample_weights, sample_weight_modes)
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\data_adapter.py in _process_tensorlike(inputs)
+   1014     return x
+   1015
+-&gt; 1016   inputs = nest.map_structure(_convert_numpy_and_scipy, inputs)
+   1017   return nest.list_to_tuple(inputs)
+   1018
+
+D:\anaconda3\lib\site-packages\tensorflow\python\util\nest.py in map_structure(func, *structure, **kwargs)
+    657
+    658   return pack_sequence_as(
+--&gt; 659       structure[0], [func(*x) for x in entries],
+    660       expand_composites=expand_composites)
+    661
+
+D:\anaconda3\lib\site-packages\tensorflow\python\util\nest.py in &lt;listcomp&gt;(.0)
+    657
+    658   return pack_sequence_as(
+--&gt; 659       structure[0], [func(*x) for x in entries],
+    660       expand_composites=expand_composites)
+    661
+
+D:\anaconda3\lib\site-packages\tensorflow\python\keras\engine\data_adapter.py in _convert_numpy_and_scipy(x)
+   1009       if issubclass(x.dtype.type, np.floating):
+   1010         dtype = backend.floatx()
+-&gt; 1011       return ops.convert_to_tensor_v2_with_dispatch(x, dtype=dtype)
+   1012     elif scipy_sparse and scipy_sparse.issparse(x):
+   1013       return _scipy_sparse_to_sparse_tensor(x)
+
+D:\anaconda3\lib\site-packages\tensorflow\python\util\dispatch.py in wrapper(*args, **kwargs)
+    199     &quot;&quot;&quot;Call target, and fall back on dispatchers if there is a TypeError.&quot;&quot;&quot;
+    200     try:
+--&gt; 201       return target(*args, **kwargs)
+    202     except (TypeError, ValueError):
+    203       # Note: convert_to_eager_tensor currently raises a ValueError, not a
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\ops.py in convert_to_tensor_v2_with_dispatch(value, dtype, dtype_hint, name)
+   1402     ValueError: If the `value` is a tensor not of given `dtype` in graph mode.
+   1403   &quot;&quot;&quot;
+-&gt; 1404   return convert_to_tensor_v2(
+   1405       value, dtype=dtype, dtype_hint=dtype_hint, name=name)
+   1406
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\ops.py in convert_to_tensor_v2(value, dtype, dtype_hint, name)
+   1408 def convert_to_tensor_v2(value, dtype=None, dtype_hint=None, name=None):
+   1409   &quot;&quot;&quot;Converts the given `value` to a `Tensor`.&quot;&quot;&quot;
+-&gt; 1410   return convert_to_tensor(
+   1411       value=value,
+   1412       dtype=dtype,
+
+D:\anaconda3\lib\site-packages\tensorflow\python\profiler\trace.py in wrapped(*args, **kwargs)
+    161         with Trace(trace_name, **trace_kwargs):
+    162           return func(*args, **kwargs)
+--&gt; 163       return func(*args, **kwargs)
+    164
+    165     return wrapped
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\ops.py in convert_to_tensor(value, dtype, name, as_ref, preferred_dtype, dtype_hint, ctx, accepted_result_types)
+   1538
+   1539     if ret is None:
+-&gt; 1540       ret = conversion_func(value, dtype=dtype, name=name, as_ref=as_ref)
+   1541
+   1542     if ret is NotImplemented:
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\tensor_conversion_registry.py in _default_conversion_function(***failed resolving arguments***)
+     50 def _default_conversion_function(value, dtype, name, as_ref):
+     51   del as_ref  # Unused.
+---&gt; 52   return constant_op.constant(value, dtype, name=name)
+     53
+     54
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\constant_op.py in constant(value, dtype, shape, name)
+    262     ValueError: if called on a symbolic tensor.
+    263   &quot;&quot;&quot;
+--&gt; 264   return _constant_impl(value, dtype, shape, name, verify_shape=False,
+    265                         allow_broadcast=True)
+    266
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\constant_op.py in _constant_impl(value, dtype, shape, name, verify_shape, allow_broadcast)
+    274       with trace.Trace(&quot;tf.constant&quot;):
+    275         return _constant_eager_impl(ctx, value, dtype, shape, verify_shape)
+--&gt; 276     return _constant_eager_impl(ctx, value, dtype, shape, verify_shape)
+    277
+    278   g = ops.get_default_graph()
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\constant_op.py in _constant_eager_impl(ctx, value, dtype, shape, verify_shape)
+    299 def _constant_eager_impl(ctx, value, dtype, shape, verify_shape):
+    300   &quot;&quot;&quot;Implementation of eager constant.&quot;&quot;&quot;
+--&gt; 301   t = convert_to_eager_tensor(value, ctx, dtype)
+    302   if shape is None:
+    303     return t
+
+D:\anaconda3\lib\site-packages\tensorflow\python\framework\constant_op.py in convert_to_eager_tensor(value, ctx, dtype)
+     96       dtype = dtypes.as_dtype(dtype).as_datatype_enum
+     97   ctx.ensure_initialized()
+---&gt; 98   return ops.EagerTensor(value, ctx.device_name, dtype)
+     99
+    100
+
+MemoryError: Unable to allocate 954. MiB for an array with shape (25000, 10000) and data type float32
+</code></pre>
+<p>As you can see, the network is very confident for some samples (0.99 or more, or 0.01 or less) but less confident for others (0.6, 0.4). </p>
+<h2 id="Further-experiments"><a href="#Further-experiments" class="headerlink" title="Further experiments"></a>Further experiments</h2><ul>
+<li>We were using 2 hidden layers. Try to use 1 or 3 hidden layers and see how it affects validation and test accuracy.</li>
+<li>Try to use layers with more hidden units or less hidden units: 32 units, 64 units…</li>
+<li>Try to use the <code>mse</code> loss function instead of <code>binary_crossentropy</code>.</li>
+<li>Try to use the <code>tanh</code> activation (an activation that was popular in the early days of neural networks) instead of <code>relu</code>.</li>
+</ul>
+<p>These experiments will help convince you that the architecture choices we have made are all fairly reasonable, although they can still be<br>improved!</p>
+<h2 id="Conclusions"><a href="#Conclusions" class="headerlink" title="Conclusions"></a>Conclusions</h2><p>Here’s what you should take away from this example:</p>
+<ul>
+<li>There’s usually quite a bit of preprocessing you need to do on your raw data in order to be able to feed it – as tensors – into a neural<br>network. In the case of sequences of words, they can be encoded as binary vectors – but there are other encoding options too.</li>
+<li>Stacks of <code>Dense</code> layers with <code>relu</code> activations can solve a wide range of problems (including sentiment classification), and you will<br>likely use them frequently.</li>
+<li>In a binary classification problem (two output classes), your network should end with a <code>Dense</code> layer with 1 unit and a <code>sigmoid</code> activation,<br>i.e. the output of your network should be a scalar between 0 and 1, encoding a probability.</li>
+<li>With such a scalar sigmoid output, on a binary classification problem, the loss function you should use is <code>binary_crossentropy</code>.</li>
+<li>The <code>rmsprop</code> optimizer is generally a good enough choice of optimizer, whatever your problem. That’s one less thing for you to worry<br>about.</li>
+<li>As they get better on their training data, neural networks eventually start <em>overfitting</em> and end up obtaining increasingly worse results on data<br>never-seen-before. Make sure to always monitor performance on data that is outside of the training set.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><br></code></pre></td></tr></table></figure>
+
+<p><strong>不知道这个破电脑怎么一回事，*的，流下贫穷的泪水</strong></p>
+<p><img src="/img/4.22.1.png" srcset="/img/loading.gif" lazyload alt="艹"></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/20/DL-with-python-1/">
+                        <span class="hidden-mobile">DL with python-1</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "akUjEbi5JLtJ7nAh3H8oqIFy-gzGzoHsz",
+          app_key: "t0benWaptdoiXv7955E5IxGq",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: true,
+          serverURLs: "true",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+  <div class="col-lg-7 mx-auto nopadding-x-md">
+    <div class="container custom post-custom mx-auto">
+      <img src="https://octodex.github.com/images/jetpacktocat.png" srcset="/img/loading.gif" lazyload class="rounded mx-auto d-block mt-5" style="width:150px; height:150px;">
+    </div>
+  </div>
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
