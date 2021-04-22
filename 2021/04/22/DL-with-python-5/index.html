@@ -1,0 +1,872 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/avatar.png">
+  <link rel="icon" href="/img/avatar.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="4.4-overfitting-and-underfitting">
+  <meta name="author" content="游隼">
+  <meta name="keywords" content="">
+  
+  <title>DL with python-5 - 游隼</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"gzzyyxh.github.io","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":false,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>丰之余</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-comment"></i>
+                留言板
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="DL with python-5">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-04-22 23:26" pubdate>
+        2021年4月22日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.6k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      91
+       分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">DL with python-5</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：几秒前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>4.4-overfitting-and-underfitting</p>
+<span id="more"></span>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> keras<br>keras.__version__<br></code></pre></td></tr></table></figure>
+
+<p>Using TensorFlow backend.</p>
+<p>‘2.0.8’</p>
+<h1 id="Overfitting-and-underfitting"><a href="#Overfitting-and-underfitting" class="headerlink" title="Overfitting and underfitting"></a>Overfitting and underfitting</h1><p>This notebook contains the code samples found in Chapter 3, Section 6 of <a target="_blank" rel="noopener" href="https://www.manning.com/books/deep-learning-with-python?a_aid=keras&a_bid=76564dff">Deep Learning with Python</a>. Note that the original text features far more content, in particular further explanations and figures: in this notebook, you will only find source code and related comments.</p>
+<hr>
+<p>In all the examples we saw in the previous chapter – movie review sentiment prediction, topic classification, and house price regression –<br>we could notice that the performance of our model on the held-out validation data would always peak after a few epochs and would then start<br>degrading, i.e. our model would quickly start to <em>overfit</em> to the training data. Overfitting happens in every single machine learning<br>problem. Learning how to deal with overfitting is essential to mastering machine learning.</p>
+<p>The fundamental issue in machine learning is the tension between optimization and generalization. “Optimization” refers to the process of<br>adjusting a model to get the best performance possible on the training data (the “learning” in “machine learning”), while “generalization”<br>refers to how well the trained model would perform on data it has never seen before. The goal of the game is to get good generalization, of<br>course, but you do not control generalization; you can only adjust the model based on its training data.</p>
+<p>At the beginning of training, optimization and generalization are correlated: the lower your loss on training data, the lower your loss on<br>test data. While this is happening, your model is said to be <em>under-fit</em>: there is still progress to be made; the network hasn’t yet<br>modeled all relevant patterns in the training data. But after a certain number of iterations on the training data, generalization stops<br>improving, validation metrics stall then start degrading: the model is then starting to over-fit, i.e. is it starting to learn patterns<br>that are specific to the training data but that are misleading or irrelevant when it comes to new data.</p>
+<p>To prevent a model from learning misleading or irrelevant patterns found in the training data, <em>the best solution is of course to get<br>more training data</em>. A model trained on more data will naturally generalize better. When that is no longer possible, the next best solution<br>is to modulate the quantity of information that your model is allowed to store, or to add constraints on what information it is allowed to<br>store. If a network can only afford to memorize a small number of patterns, the optimization process will force it to focus on the most<br>prominent patterns, which have a better chance of generalizing well.</p>
+<p>The processing of fighting overfitting in this way is called <em>regularization</em>. Let’s review some of the most common regularization<br>techniques, and let’s apply them in practice to improve our movie classification model from  the previous chapter.</p>
+<p>Note: in this notebook we will be using the IMDB test set as our validation set. It doesn’t matter in this context.</p>
+<p>Let’s prepare the data using the code from Chapter 3, Section 5:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras.datasets <span class="hljs-keyword">import</span> imdb<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br>(train_data, train_labels), (test_data, test_labels) = imdb.load_data(num_words=<span class="hljs-number">10000</span>)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">vectorize_sequences</span>(<span class="hljs-params">sequences, dimension=<span class="hljs-number">10000</span></span>):</span><br>    <span class="hljs-comment"># Create an all-zero matrix of shape (len(sequences), dimension)</span><br>    results = np.zeros((<span class="hljs-built_in">len</span>(sequences), dimension))<br>    <span class="hljs-keyword">for</span> i, sequence <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(sequences):<br>        results[i, sequence] = <span class="hljs-number">1.</span>  <span class="hljs-comment"># set specific indices of results[i] to 1s</span><br>    <span class="hljs-keyword">return</span> results<br><br><span class="hljs-comment"># Our vectorized training data</span><br>x_train = vectorize_sequences(train_data)<br><span class="hljs-comment"># Our vectorized test data</span><br>x_test = vectorize_sequences(test_data)<br><span class="hljs-comment"># Our vectorized labels</span><br>y_train = np.asarray(train_labels).astype(<span class="hljs-string">&#x27;float32&#x27;</span>)<br>y_test = np.asarray(test_labels).astype(<span class="hljs-string">&#x27;float32&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<h1 id="Fighting-overfitting"><a href="#Fighting-overfitting" class="headerlink" title="Fighting overfitting"></a>Fighting overfitting</h1><h2 id="Reducing-the-network’s-size"><a href="#Reducing-the-network’s-size" class="headerlink" title="Reducing the network’s size"></a>Reducing the network’s size</h2><p>The simplest way to prevent overfitting is to reduce the size of the model, i.e. the number of learnable parameters in the model (which is<br>determined by the number of layers and the number of units per layer). In deep learning, the number of learnable parameters in a model is<br>often referred to as the model’s “capacity”. Intuitively, a model with more parameters will have more “memorization capacity” and therefore<br>will be able to easily learn a perfect dictionary-like mapping between training samples and their targets, a mapping without any<br>generalization power. For instance, a model with 500,000 binary parameters could easily be made to learn the class of every digits in the<br>MNIST training set: we would only need 10 binary parameters for each of the 50,000 digits. Such a model would be useless for classifying<br>new digit samples. Always keep this in mind: deep learning models tend to be good at fitting to the training data, but the real challenge<br>is generalization, not fitting.</p>
+<p>On the other hand, if the network has limited memorization resources, it will not be able to learn this mapping as easily, and thus, in<br>order to minimize its loss, it will have to resort to learning compressed representations that have predictive power regarding the targets<br>– precisely the type of representations that we are interested in. At the same time, keep in mind that you should be using models that have<br>enough parameters that they won’t be underfitting: your model shouldn’t be starved for memorization resources. There is a compromise to be<br>found between “too much capacity” and “not enough capacity”.</p>
+<p>Unfortunately, there is no magical formula to determine what the right number of layers is, or what the right size for each layer is. You<br>will have to evaluate an array of different architectures (on your validation set, not on your test set, of course) in order to find the<br>right model size for your data. The general workflow to find an appropriate model size is to start with relatively few layers and<br>parameters, and start increasing the size of the layers or adding new layers until you see diminishing returns with regard to the<br>validation loss.</p>
+<p>Let’s try this on our movie review classification network. Our original network was as such:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> models<br><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> layers<br><br>original_model = models.Sequential()<br>original_model.add(layers.Dense(<span class="hljs-number">16</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>, input_shape=(<span class="hljs-number">10000</span>,)))<br>original_model.add(layers.Dense(<span class="hljs-number">16</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>original_model.add(layers.Dense(<span class="hljs-number">1</span>, activation=<span class="hljs-string">&#x27;sigmoid&#x27;</span>))<br><br>original_model.<span class="hljs-built_in">compile</span>(optimizer=<span class="hljs-string">&#x27;rmsprop&#x27;</span>,<br>                       loss=<span class="hljs-string">&#x27;binary_crossentropy&#x27;</span>,<br>                       metrics=[<span class="hljs-string">&#x27;acc&#x27;</span>])<br></code></pre></td></tr></table></figure>
+
+<p>Now let’s try to replace it with this smaller network:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python">smaller_model = models.Sequential()<br>smaller_model.add(layers.Dense(<span class="hljs-number">4</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>, input_shape=(<span class="hljs-number">10000</span>,)))<br>smaller_model.add(layers.Dense(<span class="hljs-number">4</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>smaller_model.add(layers.Dense(<span class="hljs-number">1</span>, activation=<span class="hljs-string">&#x27;sigmoid&#x27;</span>))<br><br>smaller_model.<span class="hljs-built_in">compile</span>(optimizer=<span class="hljs-string">&#x27;rmsprop&#x27;</span>,<br>                      loss=<span class="hljs-string">&#x27;binary_crossentropy&#x27;</span>,<br>                      metrics=[<span class="hljs-string">&#x27;acc&#x27;</span>])<br></code></pre></td></tr></table></figure>
+
+
+<p>Here’s a comparison of the validation losses of the original network and the smaller network. The dots are the validation loss values of<br>the smaller network, and the crosses are the initial network (remember: a lower validation loss signals a better model).</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">original_hist = original_model.fit(x_train, y_train,<br>                                   epochs=<span class="hljs-number">20</span>,<br>                                   batch_size=<span class="hljs-number">512</span>,<br>                                   validation_data=(x_test, y_test))<br></code></pre></td></tr></table></figure>
+
+<pre><code>Train on 25000 samples, validate on 25000 samples
+Epoch 1/20
+25000/25000 [==============================] - 3s - loss: 0.4594 - acc: 0.8188 - val_loss: 0.3429 - val_acc: 0.8812
+Epoch 2/20
+25000/25000 [==============================] - 2s - loss: 0.2659 - acc: 0.9075 - val_loss: 0.2873 - val_acc: 0.8905
+Epoch 3/20
+25000/25000 [==============================] - 2s - loss: 0.2060 - acc: 0.9276 - val_loss: 0.2827 - val_acc: 0.8879
+Epoch 4/20
+25000/25000 [==============================] - 2s - loss: 0.1697 - acc: 0.9401 - val_loss: 0.2921 - val_acc: 0.8851
+Epoch 5/20
+25000/25000 [==============================] - 2s - loss: 0.1495 - acc: 0.9470 - val_loss: 0.3100 - val_acc: 0.8812
+Epoch 6/20
+25000/25000 [==============================] - 2s - loss: 0.1283 - acc: 0.9572 - val_loss: 0.3336 - val_acc: 0.8748
+Epoch 7/20
+25000/25000 [==============================] - 2s - loss: 0.1121 - acc: 0.9624 - val_loss: 0.3987 - val_acc: 0.8593
+Epoch 8/20
+25000/25000 [==============================] - 2s - loss: 0.0994 - acc: 0.9670 - val_loss: 0.3788 - val_acc: 0.8702
+Epoch 9/20
+25000/25000 [==============================] - 2s - loss: 0.0889 - acc: 0.9716 - val_loss: 0.4242 - val_acc: 0.8603
+Epoch 10/20
+25000/25000 [==============================] - 2s - loss: 0.0782 - acc: 0.9757 - val_loss: 0.4256 - val_acc: 0.8653
+Epoch 11/20
+25000/25000 [==============================] - 2s - loss: 0.0691 - acc: 0.9792 - val_loss: 0.4515 - val_acc: 0.8638
+Epoch 12/20
+25000/25000 [==============================] - 2s - loss: 0.0603 - acc: 0.9820 - val_loss: 0.5102 - val_acc: 0.8610
+Epoch 13/20
+25000/25000 [==============================] - 2s - loss: 0.0518 - acc: 0.9851 - val_loss: 0.5281 - val_acc: 0.8587
+Epoch 14/20
+25000/25000 [==============================] - 2s - loss: 0.0446 - acc: 0.9873 - val_loss: 0.5441 - val_acc: 0.8589
+Epoch 15/20
+25000/25000 [==============================] - 2s - loss: 0.0367 - acc: 0.9903 - val_loss: 0.5777 - val_acc: 0.8574
+Epoch 16/20
+25000/25000 [==============================] - 2s - loss: 0.0313 - acc: 0.9922 - val_loss: 0.6377 - val_acc: 0.8555
+Epoch 17/20
+25000/25000 [==============================] - 2s - loss: 0.0247 - acc: 0.9941 - val_loss: 0.7269 - val_acc: 0.8501
+Epoch 18/20
+25000/25000 [==============================] - 2s - loss: 0.0203 - acc: 0.9956 - val_loss: 0.6920 - val_acc: 0.8516
+Epoch 19/20
+25000/25000 [==============================] - 2s - loss: 0.0156 - acc: 0.9970 - val_loss: 0.7689 - val_acc: 0.8425
+Epoch 20/20
+25000/25000 [==============================] - 2s - loss: 0.0144 - acc: 0.9966 - val_loss: 0.7694 - val_acc: 0.8487
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">smaller_model_hist = smaller_model.fit(x_train, y_train,<br>                                       epochs=<span class="hljs-number">20</span>,<br>                                       batch_size=<span class="hljs-number">512</span>,<br>                                       validation_data=(x_test, y_test))<br></code></pre></td></tr></table></figure>
+
+<pre><code>Train on 25000 samples, validate on 25000 samples
+Epoch 1/20
+25000/25000 [==============================] - 2s - loss: 0.5737 - acc: 0.8049 - val_loss: 0.4826 - val_acc: 0.8616
+Epoch 2/20
+25000/25000 [==============================] - 2s - loss: 0.3973 - acc: 0.8866 - val_loss: 0.3699 - val_acc: 0.8776
+Epoch 3/20
+25000/25000 [==============================] - 2s - loss: 0.2985 - acc: 0.9054 - val_loss: 0.3140 - val_acc: 0.8860
+Epoch 4/20
+25000/25000 [==============================] - 2s - loss: 0.2428 - acc: 0.9189 - val_loss: 0.2913 - val_acc: 0.8870
+Epoch 5/20
+25000/25000 [==============================] - 2s - loss: 0.2085 - acc: 0.9290 - val_loss: 0.2809 - val_acc: 0.8897
+Epoch 6/20
+25000/25000 [==============================] - 2s - loss: 0.1849 - acc: 0.9360 - val_loss: 0.2772 - val_acc: 0.8899
+Epoch 7/20
+25000/25000 [==============================] - 2s - loss: 0.1666 - acc: 0.9430 - val_loss: 0.2835 - val_acc: 0.8863
+Epoch 8/20
+25000/25000 [==============================] - 2s - loss: 0.1515 - acc: 0.9487 - val_loss: 0.2909 - val_acc: 0.8850
+Epoch 9/20
+25000/25000 [==============================] - 2s - loss: 0.1388 - acc: 0.9526 - val_loss: 0.2984 - val_acc: 0.8842
+Epoch 10/20
+25000/25000 [==============================] - 2s - loss: 0.1285 - acc: 0.9569 - val_loss: 0.3102 - val_acc: 0.8818
+Epoch 11/20
+25000/25000 [==============================] - 2s - loss: 0.1194 - acc: 0.9599 - val_loss: 0.3219 - val_acc: 0.8794
+Epoch 12/20
+25000/25000 [==============================] - 2s - loss: 0.1105 - acc: 0.9648 - val_loss: 0.3379 - val_acc: 0.8774
+Epoch 13/20
+25000/25000 [==============================] - 2s - loss: 0.1035 - acc: 0.9674 - val_loss: 0.3532 - val_acc: 0.8730
+Epoch 14/20
+25000/25000 [==============================] - 2s - loss: 0.0963 - acc: 0.9688 - val_loss: 0.3651 - val_acc: 0.8731
+Epoch 15/20
+25000/25000 [==============================] - 2s - loss: 0.0895 - acc: 0.9724 - val_loss: 0.3858 - val_acc: 0.8703
+Epoch 16/20
+25000/25000 [==============================] - 2s - loss: 0.0838 - acc: 0.9734 - val_loss: 0.4157 - val_acc: 0.8654
+Epoch 17/20
+25000/25000 [==============================] - 2s - loss: 0.0785 - acc: 0.9764 - val_loss: 0.4214 - val_acc: 0.8677
+Epoch 18/20
+25000/25000 [==============================] - 2s - loss: 0.0733 - acc: 0.9784 - val_loss: 0.4390 - val_acc: 0.8644
+Epoch 19/20
+25000/25000 [==============================] - 2s - loss: 0.0685 - acc: 0.9796 - val_loss: 0.4539 - val_acc: 0.8638
+Epoch 20/20
+25000/25000 [==============================] - 2s - loss: 0.0638 - acc: 0.9822 - val_loss: 0.4744 - val_acc: 0.8617
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">epochs = <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">21</span>)<br>original_val_loss = original_hist.history[<span class="hljs-string">&#x27;val_loss&#x27;</span>]<br>smaller_model_val_loss = smaller_model_hist.history[<span class="hljs-string">&#x27;val_loss&#x27;</span>]<br></code></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><br><span class="hljs-comment"># b+ is for &quot;blue cross&quot;</span><br>plt.plot(epochs, original_val_loss, <span class="hljs-string">&#x27;b+&#x27;</span>, label=<span class="hljs-string">&#x27;Original model&#x27;</span>)<br><span class="hljs-comment"># &quot;bo&quot; is for &quot;blue dot&quot;</span><br>plt.plot(epochs, smaller_model_val_loss, <span class="hljs-string">&#x27;bo&#x27;</span>, label=<span class="hljs-string">&#x27;Smaller model&#x27;</span>)<br>plt.xlabel(<span class="hljs-string">&#x27;Epochs&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;Validation loss&#x27;</span>)<br>plt.legend()<br><br>plt.show()<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/img/output_12_0.png" srcset="/img/loading.gif" lazyload alt="output"></p>
+<p>As you can see, the smaller network starts overfitting later than the reference one (after 6 epochs rather than 4) and its performance<br>degrades much more slowly once it starts overfitting.</p>
+<p>Now, for kicks, let’s add to this benchmark a network that has much more capacity, far more than the problem would warrant:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python">bigger_model = models.Sequential()<br>bigger_model.add(layers.Dense(<span class="hljs-number">512</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>, input_shape=(<span class="hljs-number">10000</span>,)))<br>bigger_model.add(layers.Dense(<span class="hljs-number">512</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>bigger_model.add(layers.Dense(<span class="hljs-number">1</span>, activation=<span class="hljs-string">&#x27;sigmoid&#x27;</span>))<br><br>bigger_model.<span class="hljs-built_in">compile</span>(optimizer=<span class="hljs-string">&#x27;rmsprop&#x27;</span>,<br>                     loss=<span class="hljs-string">&#x27;binary_crossentropy&#x27;</span>,<br>                     metrics=[<span class="hljs-string">&#x27;acc&#x27;</span>])<br></code></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">bigger_model_hist = bigger_model.fit(x_train, y_train,<br>                                     epochs=<span class="hljs-number">20</span>,<br>                                     batch_size=<span class="hljs-number">512</span>,<br>                                     validation_data=(x_test, y_test))<br></code></pre></td></tr></table></figure>
+
+<pre><code>Train on 25000 samples, validate on 25000 samples
+Epoch 1/20
+25000/25000 [==============================] - 3s - loss: 0.4539 - acc: 0.8011 - val_loss: 0.4150 - val_acc: 0.8229
+Epoch 2/20
+25000/25000 [==============================] - 3s - loss: 0.2148 - acc: 0.9151 - val_loss: 0.2742 - val_acc: 0.8901
+Epoch 3/20
+25000/25000 [==============================] - 3s - loss: 0.1217 - acc: 0.9544 - val_loss: 0.5442 - val_acc: 0.7975
+Epoch 4/20
+25000/25000 [==============================] - 3s - loss: 0.0552 - acc: 0.9835 - val_loss: 0.4316 - val_acc: 0.8842
+Epoch 5/20
+25000/25000 [==============================] - 3s - loss: 0.0662 - acc: 0.9888 - val_loss: 0.5098 - val_acc: 0.8822
+Epoch 6/20
+25000/25000 [==============================] - 3s - loss: 0.0017 - acc: 0.9998 - val_loss: 0.6867 - val_acc: 0.8811
+Epoch 7/20
+25000/25000 [==============================] - 3s - loss: 0.1019 - acc: 0.9882 - val_loss: 0.6737 - val_acc: 0.8800
+Epoch 8/20
+25000/25000 [==============================] - 3s - loss: 0.0735 - acc: 0.9896 - val_loss: 0.6185 - val_acc: 0.8772
+Epoch 9/20
+25000/25000 [==============================] - 3s - loss: 3.4759e-04 - acc: 1.0000 - val_loss: 0.7328 - val_acc: 0.8818
+Epoch 10/20
+25000/25000 [==============================] - 3s - loss: 0.0504 - acc: 0.9912 - val_loss: 0.7092 - val_acc: 0.8791
+Epoch 11/20
+25000/25000 [==============================] - 3s - loss: 0.0589 - acc: 0.9919 - val_loss: 0.6831 - val_acc: 0.8785
+Epoch 12/20
+25000/25000 [==============================] - 3s - loss: 1.9067e-04 - acc: 1.0000 - val_loss: 0.8005 - val_acc: 0.8784
+Epoch 13/20
+25000/25000 [==============================] - 3s - loss: 0.0623 - acc: 0.9916 - val_loss: 0.7540 - val_acc: 0.8740
+Epoch 14/20
+25000/25000 [==============================] - 3s - loss: 0.0274 - acc: 0.9954 - val_loss: 0.7806 - val_acc: 0.8670
+Epoch 15/20
+25000/25000 [==============================] - 3s - loss: 0.0011 - acc: 0.9998 - val_loss: 0.8107 - val_acc: 0.8783
+Epoch 16/20
+25000/25000 [==============================] - 3s - loss: 0.0445 - acc: 0.9943 - val_loss: 0.8394 - val_acc: 0.8702
+Epoch 17/20
+25000/25000 [==============================] - 3s - loss: 0.0268 - acc: 0.9959 - val_loss: 0.7708 - val_acc: 0.8745
+Epoch 18/20
+25000/25000 [==============================] - 3s - loss: 7.7057e-04 - acc: 1.0000 - val_loss: 0.8885 - val_acc: 0.8738
+Epoch 19/20
+25000/25000 [==============================] - 3s - loss: 0.0297 - acc: 0.9962 - val_loss: 0.8419 - val_acc: 0.8728
+Epoch 20/20
+25000/25000 [==============================] - 3s - loss: 0.0018 - acc: 0.9998 - val_loss: 0.8896 - val_acc: 0.8682
+</code></pre>
+<p>Here’s how the bigger network fares compared to the reference one. The dots are the validation loss values of the bigger network, and the<br>crosses are the initial network.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">bigger_model_val_loss = bigger_model_hist.history[<span class="hljs-string">&#x27;val_loss&#x27;</span>]<br><br>plt.plot(epochs, original_val_loss, <span class="hljs-string">&#x27;b+&#x27;</span>, label=<span class="hljs-string">&#x27;Original model&#x27;</span>)<br>plt.plot(epochs, bigger_model_val_loss, <span class="hljs-string">&#x27;bo&#x27;</span>, label=<span class="hljs-string">&#x27;Bigger model&#x27;</span>)<br>plt.xlabel(<span class="hljs-string">&#x27;Epochs&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;Validation loss&#x27;</span>)<br>plt.legend()<br><br>plt.show()<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/img/output_17_0.png" srcset="/img/loading.gif" lazyload alt="output"></p>
+<p>The bigger network starts overfitting almost right away, after just one epoch, and overfits much more severely. Its validation loss is also<br>more noisy.</p>
+<p>Meanwhile, here are the training losses for our two networks:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">original_train_loss = original_hist.history[<span class="hljs-string">&#x27;loss&#x27;</span>]<br>bigger_model_train_loss = bigger_model_hist.history[<span class="hljs-string">&#x27;loss&#x27;</span>]<br><br>plt.plot(epochs, original_train_loss, <span class="hljs-string">&#x27;b+&#x27;</span>, label=<span class="hljs-string">&#x27;Original model&#x27;</span>)<br>plt.plot(epochs, bigger_model_train_loss, <span class="hljs-string">&#x27;bo&#x27;</span>, label=<span class="hljs-string">&#x27;Bigger model&#x27;</span>)<br>plt.xlabel(<span class="hljs-string">&#x27;Epochs&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;Training loss&#x27;</span>)<br>plt.legend()<br><br>plt.show()<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/img/output_19_0.png" srcset="/img/loading.gif" lazyload alt="output"></p>
+<p>As you can see, the bigger network gets its training loss near zero very quickly. The more capacity the network has, the quicker it will be<br>able to model the training data (resulting in a low training loss), but the more susceptible it is to overfitting (resulting in a large<br>difference between the training and validation loss).</p>
+<h2 id="Adding-weight-regularization"><a href="#Adding-weight-regularization" class="headerlink" title="Adding weight regularization"></a>Adding weight regularization</h2><p>You may be familiar with <em>Occam’s Razor</em> principle: given two explanations for something, the explanation most likely to be correct is the<br>“simplest” one, the one that makes the least amount of assumptions. This also applies to the models learned by neural networks: given some<br>training data and a network architecture, there are multiple sets of weights values (multiple <em>models</em>) that could explain the data, and<br>simpler models are less likely to overfit than complex ones.</p>
+<p>A “simple model” in this context is a model where the distribution of parameter values has less entropy (or a model with fewer<br>parameters altogether, as we saw in the section above). Thus a common way to mitigate overfitting is to put constraints on the complexity<br>of a network by forcing its weights to only take small values, which makes the distribution of weight values more “regular”. This is called<br>“weight regularization”, and it is done by adding to the loss function of the network a <em>cost</em> associated with having large weights. This<br>cost comes in two flavors:</p>
+<ul>
+<li>L1 regularization, where the cost added is proportional to the <em>absolute value of the weights coefficients</em> (i.e. to what is called the<br>“L1 norm” of the weights).</li>
+<li>L2 regularization, where the cost added is proportional to the <em>square of the value of the weights coefficients</em> (i.e. to what is called<br>the “L2 norm” of the weights). L2 regularization is also called <em>weight decay</em> in the context of neural networks. Don’t let the different<br>name confuse you: weight decay is mathematically the exact same as L2 regularization.</li>
+</ul>
+<p>In Keras, weight regularization is added by passing <em>weight regularizer instances</em> to layers as keyword arguments. Let’s add L2 weight<br>regularization to our movie review classification network:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> regularizers<br><br>l2_model = models.Sequential()<br>l2_model.add(layers.Dense(<span class="hljs-number">16</span>, kernel_regularizer=regularizers.l2(<span class="hljs-number">0.001</span>),<br>                          activation=<span class="hljs-string">&#x27;relu&#x27;</span>, input_shape=(<span class="hljs-number">10000</span>,)))<br>l2_model.add(layers.Dense(<span class="hljs-number">16</span>, kernel_regularizer=regularizers.l2(<span class="hljs-number">0.001</span>),<br>                          activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>l2_model.add(layers.Dense(<span class="hljs-number">1</span>, activation=<span class="hljs-string">&#x27;sigmoid&#x27;</span>))<br></code></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">l2_model.<span class="hljs-built_in">compile</span>(optimizer=<span class="hljs-string">&#x27;rmsprop&#x27;</span>,<br>                 loss=<span class="hljs-string">&#x27;binary_crossentropy&#x27;</span>,<br>                 metrics=[<span class="hljs-string">&#x27;acc&#x27;</span>])<br></code></pre></td></tr></table></figure>
+
+<p><code>l2(0.001)</code> means that every coefficient in the weight matrix of the layer will add <code>0.001 * weight_coefficient_value</code> to the total loss of<br>the network. Note that because this penalty is <em>only added at training time</em>, the loss for this network will be much higher at training<br>than at test time.</p>
+<p>Here’s the impact of our L2 regularization penalty:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">l2_model_hist = l2_model.fit(x_train, y_train,<br>                             epochs=<span class="hljs-number">20</span>,<br>                             batch_size=<span class="hljs-number">512</span>,<br>                             validation_data=(x_test, y_test))<br></code></pre></td></tr></table></figure>
+
+<pre><code>Train on 25000 samples, validate on 25000 samples
+Epoch 1/20
+25000/25000 [==============================] - 3s - loss: 0.4880 - acc: 0.8218 - val_loss: 0.3820 - val_acc: 0.8798
+Epoch 2/20
+25000/25000 [==============================] - 2s - loss: 0.3162 - acc: 0.9068 - val_loss: 0.3353 - val_acc: 0.8896
+Epoch 3/20
+25000/25000 [==============================] - 2s - loss: 0.2742 - acc: 0.9185 - val_loss: 0.3306 - val_acc: 0.8898
+Epoch 4/20
+25000/25000 [==============================] - 2s - loss: 0.2489 - acc: 0.9288 - val_loss: 0.3363 - val_acc: 0.8866
+Epoch 5/20
+25000/25000 [==============================] - 2s - loss: 0.2420 - acc: 0.9318 - val_loss: 0.3492 - val_acc: 0.8820
+Epoch 6/20
+25000/25000 [==============================] - 2s - loss: 0.2322 - acc: 0.9359 - val_loss: 0.3567 - val_acc: 0.8788
+Epoch 7/20
+25000/25000 [==============================] - 2s - loss: 0.2254 - acc: 0.9385 - val_loss: 0.3632 - val_acc: 0.8787
+Epoch 8/20
+25000/25000 [==============================] - 2s - loss: 0.2219 - acc: 0.9380 - val_loss: 0.3630 - val_acc: 0.8794
+Epoch 9/20
+25000/25000 [==============================] - 2s - loss: 0.2162 - acc: 0.9430 - val_loss: 0.3704 - val_acc: 0.8763
+Epoch 10/20
+25000/25000 [==============================] - 2s - loss: 0.2144 - acc: 0.9428 - val_loss: 0.3876 - val_acc: 0.8727
+Epoch 11/20
+25000/25000 [==============================] - 2s - loss: 0.2091 - acc: 0.9439 - val_loss: 0.3883 - val_acc: 0.8724
+Epoch 12/20
+25000/25000 [==============================] - 2s - loss: 0.2061 - acc: 0.9455 - val_loss: 0.3870 - val_acc: 0.8740
+Epoch 13/20
+25000/25000 [==============================] - 2s - loss: 0.2069 - acc: 0.9445 - val_loss: 0.4073 - val_acc: 0.8714
+Epoch 14/20
+25000/25000 [==============================] - 2s - loss: 0.2028 - acc: 0.9475 - val_loss: 0.3976 - val_acc: 0.8714
+Epoch 15/20
+25000/25000 [==============================] - 2s - loss: 0.1998 - acc: 0.9472 - val_loss: 0.4362 - val_acc: 0.8670
+Epoch 16/20
+25000/25000 [==============================] - 2s - loss: 0.2019 - acc: 0.9462 - val_loss: 0.4088 - val_acc: 0.8711
+Epoch 17/20
+25000/25000 [==============================] - 2s - loss: 0.1953 - acc: 0.9495 - val_loss: 0.4185 - val_acc: 0.8698
+Epoch 18/20
+25000/25000 [==============================] - 2s - loss: 0.1945 - acc: 0.9508 - val_loss: 0.4371 - val_acc: 0.8674
+Epoch 19/20
+25000/25000 [==============================] - 2s - loss: 0.1934 - acc: 0.9486 - val_loss: 0.4136 - val_acc: 0.8699
+Epoch 20/20
+25000/25000 [==============================] - 2s - loss: 0.1924 - acc: 0.9504 - val_loss: 0.4200 - val_acc: 0.8704
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">l2_model_val_loss = l2_model_hist.history[<span class="hljs-string">&#x27;val_loss&#x27;</span>]<br><br>plt.plot(epochs, original_val_loss, <span class="hljs-string">&#x27;b+&#x27;</span>, label=<span class="hljs-string">&#x27;Original model&#x27;</span>)<br>plt.plot(epochs, l2_model_val_loss, <span class="hljs-string">&#x27;bo&#x27;</span>, label=<span class="hljs-string">&#x27;L2-regularized model&#x27;</span>)<br>plt.xlabel(<span class="hljs-string">&#x27;Epochs&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;Validation loss&#x27;</span>)<br>plt.legend()<br><br>plt.show()<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/img/output_26_0p.png" srcset="/img/loading.gif" lazyload alt="output"></p>
+<p>As you can see, the model with L2 regularization (dots) has become much more resistant to overfitting than the reference model (crosses),<br>even though both models have the same number of parameters.</p>
+<p>As alternatives to L2 regularization, you could use one of the following Keras weight regularizers:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> regularizers<br><br><span class="hljs-comment"># L1 regularization</span><br>regularizers.l1(<span class="hljs-number">0.001</span>)<br><br><span class="hljs-comment"># L1 and L2 regularization at the same time</span><br>regularizers.l1_l2(l1=<span class="hljs-number">0.001</span>, l2=<span class="hljs-number">0.001</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="Adding-dropout"><a href="#Adding-dropout" class="headerlink" title="Adding dropout"></a>Adding dropout</h2><p>Dropout is one of the most effective and most commonly used regularization techniques for neural networks, developed by Hinton and his<br>students at the University of Toronto. Dropout, applied to a layer, consists of randomly “dropping out” (i.e. setting to zero) a number of<br>output features of the layer during training. Let’s say a given layer would normally have returned a vector <code>[0.2, 0.5, 1.3, 0.8, 1.1]</code> for a<br>given input sample during training; after applying dropout, this vector will have a few zero entries distributed at random, e.g. <code>[0, 0.5,  1.3, 0, 1.1]</code>. The “dropout rate” is the fraction of the features that are being zeroed-out; it is usually set between 0.2 and 0.5. At test<br>time, no units are dropped out, and instead the layer’s output values are scaled down by a factor equal to the dropout rate, so as to<br>balance for the fact that more units are active than at training time.</p>
+<p>Consider a Numpy matrix containing the output of a layer, <code>layer_output</code>, of shape <code>(batch_size, features)</code>. At training time, we would be<br>zero-ing out at random a fraction of the values in the matrix:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># At training time: we drop out 50% of the units in the output</span><br>layer_output *= np.randint(<span class="hljs-number">0</span>, high=<span class="hljs-number">2</span>, size=layer_output.shape)<br></code></pre></td></tr></table></figure>
+
+
+<p>At test time, we would be scaling the output down by the dropout rate. Here we scale by 0.5 (because we were previous dropping half the<br>units):</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># At test time:</span><br>layer_output *= <span class="hljs-number">0.5</span><br></code></pre></td></tr></table></figure>
+
+
+<p>Note that this process can be implemented by doing both operations at training time and leaving the output unchanged at test time, which is<br>often the way it is implemented in practice:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># At training time:</span><br>layer_output *= np.randint(<span class="hljs-number">0</span>, high=<span class="hljs-number">2</span>, size=layer_output.shape)<br><span class="hljs-comment"># Note that we are scaling *up* rather scaling *down* in this case</span><br>layer_output /= <span class="hljs-number">0.5</span><br></code></pre></td></tr></table></figure>
+
+
+<p>This technique may seem strange and arbitrary. Why would this help reduce overfitting? Geoff Hinton has said that he was inspired, among<br>other things, by a fraud prevention mechanism used by banks – in his own words: <em>“I went to my bank. The tellers kept changing and I asked<br>one of them why. He said he didn’t know but they got moved around a lot. I figured it must be because it would require cooperation<br>between employees to successfully defraud the bank. This made me realize that randomly removing a different subset of neurons on each<br>example would prevent conspiracies and thus reduce overfitting”</em>.</p>
+<p>The core idea is that introducing noise in the output values of a layer can break up happenstance patterns that are not significant (what<br>Hinton refers to as “conspiracies”), which the network would start memorizing if no noise was present. </p>
+<p>In Keras you can introduce dropout in a network via the <code>Dropout</code> layer, which gets applied to the output of layer right before it, e.g.:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">model.add(layers.Dropout(<span class="hljs-number">0.5</span>))<br></code></pre></td></tr></table></figure>
+
+<p>Let’s add two <code>Dropout</code> layers in our IMDB network to see how well they do at reducing overfitting:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">dpt_model = models.Sequential()<br>dpt_model.add(layers.Dense(<span class="hljs-number">16</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>, input_shape=(<span class="hljs-number">10000</span>,)))<br>dpt_model.add(layers.Dropout(<span class="hljs-number">0.5</span>))<br>dpt_model.add(layers.Dense(<span class="hljs-number">16</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>dpt_model.add(layers.Dropout(<span class="hljs-number">0.5</span>))<br>dpt_model.add(layers.Dense(<span class="hljs-number">1</span>, activation=<span class="hljs-string">&#x27;sigmoid&#x27;</span>))<br><br>dpt_model.<span class="hljs-built_in">compile</span>(optimizer=<span class="hljs-string">&#x27;rmsprop&#x27;</span>,<br>                  loss=<span class="hljs-string">&#x27;binary_crossentropy&#x27;</span>,<br>                  metrics=[<span class="hljs-string">&#x27;acc&#x27;</span>])<br></code></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">dpt_model_hist = dpt_model.fit(x_train, y_train,<br>                               epochs=<span class="hljs-number">20</span>,<br>                               batch_size=<span class="hljs-number">512</span>,<br>                               validation_data=(x_test, y_test))<br></code></pre></td></tr></table></figure>
+
+<pre><code>Train on 25000 samples, validate on 25000 samples
+Epoch 1/20
+25000/25000 [==============================] - 3s - loss: 0.6035 - acc: 0.6678 - val_loss: 0.4704 - val_acc: 0.8651
+Epoch 2/20
+25000/25000 [==============================] - 2s - loss: 0.4622 - acc: 0.8002 - val_loss: 0.3612 - val_acc: 0.8724
+Epoch 3/20
+25000/25000 [==============================] - 2s - loss: 0.3731 - acc: 0.8553 - val_loss: 0.2960 - val_acc: 0.8904
+Epoch 4/20
+25000/25000 [==============================] - 2s - loss: 0.3162 - acc: 0.8855 - val_loss: 0.2772 - val_acc: 0.8917
+Epoch 5/20
+25000/25000 [==============================] - 2s - loss: 0.2762 - acc: 0.9033 - val_loss: 0.2803 - val_acc: 0.8889
+Epoch 6/20
+25000/25000 [==============================] - 2s - loss: 0.2454 - acc: 0.9172 - val_loss: 0.2823 - val_acc: 0.8892
+Epoch 7/20
+25000/25000 [==============================] - 2s - loss: 0.2178 - acc: 0.9281 - val_loss: 0.2982 - val_acc: 0.8877
+Epoch 8/20
+25000/25000 [==============================] - 2s - loss: 0.1994 - acc: 0.9351 - val_loss: 0.3101 - val_acc: 0.8875
+Epoch 9/20
+25000/25000 [==============================] - 2s - loss: 0.1832 - acc: 0.9400 - val_loss: 0.3318 - val_acc: 0.8860
+Epoch 10/20
+25000/25000 [==============================] - 2s - loss: 0.1692 - acc: 0.9434 - val_loss: 0.3534 - val_acc: 0.8841
+Epoch 11/20
+25000/25000 [==============================] - 2s - loss: 0.1590 - acc: 0.9483 - val_loss: 0.3689 - val_acc: 0.8830
+Epoch 12/20
+25000/25000 [==============================] - 2s - loss: 0.1499 - acc: 0.9496 - val_loss: 0.4107 - val_acc: 0.8776
+Epoch 13/20
+25000/25000 [==============================] - 2s - loss: 0.1405 - acc: 0.9539 - val_loss: 0.4114 - val_acc: 0.8782
+Epoch 14/20
+25000/25000 [==============================] - 2s - loss: 0.1333 - acc: 0.9562 - val_loss: 0.4549 - val_acc: 0.8771
+Epoch 15/20
+25000/25000 [==============================] - 2s - loss: 0.1267 - acc: 0.9572 - val_loss: 0.4579 - val_acc: 0.8800
+Epoch 16/20
+25000/25000 [==============================] - 2s - loss: 0.1225 - acc: 0.9580 - val_loss: 0.4843 - val_acc: 0.8772
+Epoch 17/20
+25000/25000 [==============================] - 2s - loss: 0.1233 - acc: 0.9590 - val_loss: 0.4783 - val_acc: 0.8761
+Epoch 18/20
+25000/25000 [==============================] - 2s - loss: 0.1212 - acc: 0.9601 - val_loss: 0.5051 - val_acc: 0.8740
+Epoch 19/20
+25000/25000 [==============================] - 2s - loss: 0.1153 - acc: 0.9618 - val_loss: 0.5451 - val_acc: 0.8747
+Epoch 20/20
+25000/25000 [==============================] - 2s - loss: 0.1155 - acc: 0.9621 - val_loss: 0.5358 - val_acc: 0.8738
+</code></pre>
+<p>Let’s plot the results:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">dpt_model_val_loss = dpt_model_hist.history[<span class="hljs-string">&#x27;val_loss&#x27;</span>]<br><br>plt.plot(epochs, original_val_loss, <span class="hljs-string">&#x27;b+&#x27;</span>, label=<span class="hljs-string">&#x27;Original model&#x27;</span>)<br>plt.plot(epochs, dpt_model_val_loss, <span class="hljs-string">&#x27;bo&#x27;</span>, label=<span class="hljs-string">&#x27;Dropout-regularized model&#x27;</span>)<br>plt.xlabel(<span class="hljs-string">&#x27;Epochs&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;Validation loss&#x27;</span>)<br>plt.legend()<br><br>plt.show()<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/img/output_41_0.png" srcset="/img/loading.gif" lazyload alt="output"></p>
+<p>Again, a clear improvement over the reference network.</p>
+<p>To recap: here the most common ways to prevent overfitting in neural networks:</p>
+<ul>
+<li>Getting more training data.</li>
+<li>Reducing the capacity of the network.</li>
+<li>Adding weight regularization.</li>
+<li>Adding dropout.</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/22/DL-with-python-4/">
+                        <span class="hidden-mobile">DL with python-4</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "akUjEbi5JLtJ7nAh3H8oqIFy-gzGzoHsz",
+          app_key: "t0benWaptdoiXv7955E5IxGq",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: true,
+          serverURLs: "true",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+  <div class="col-lg-7 mx-auto nopadding-x-md">
+    <div class="container custom post-custom mx-auto">
+      <img src="https://octodex.github.com/images/jetpacktocat.png" srcset="/img/loading.gif" lazyload class="rounded mx-auto d-block mt-5" style="width:150px; height:150px;">
+    </div>
+  </div>
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
