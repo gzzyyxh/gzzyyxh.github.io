@@ -263,7 +263,7 @@
               <p>5.1-introduction-to-convnets</p>
 <span id="more"></span>
 
-<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> keras<br>keras.__version__<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> keras<br>keras.__version__<br></code></pre></td></tr></table></figure>
 
 <p>Using TensorFlow backend.</p>
 <p>‘2.0.8’</p>
@@ -271,12 +271,12 @@
 <hr>
 <p>First, let’s take a practical look at a very simple convnet example. We will use our convnet to classify MNIST digits, a task that you’ve already been<br>through in Chapter 2, using a densely-connected network (our test accuracy then was 97.8%). Even though our convnet will be very basic, its<br>accuracy will still blow out of the water that of the densely-connected model from Chapter 2.</p>
 <p>The 6 lines of code below show you what a basic convnet looks like. It’s a stack of <code>Conv2D</code> and <code>MaxPooling2D</code> layers. We’ll see in a<br>minute what they do concretely.<br>Importantly, a convnet takes as input tensors of shape <code>(image_height, image_width, image_channels)</code> (not including the batch dimension).<br>In our case, we will configure our convnet to process inputs of size <code>(28, 28, 1)</code>, which is the format of MNIST images. We do this via<br>passing the argument <code>input_shape=(28, 28, 1)</code> to our first layer.</p>
-<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> layers<br><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> models<br><br>model = models.Sequential()<br>model.add(layers.Conv2D(<span class="hljs-number">32</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>, input_shape=(<span class="hljs-number">28</span>, <span class="hljs-number">28</span>, <span class="hljs-number">1</span>)))<br>model.add(layers.MaxPooling2D((<span class="hljs-number">2</span>, <span class="hljs-number">2</span>)))<br>model.add(layers.Conv2D(<span class="hljs-number">64</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>model.add(layers.MaxPooling2D((<span class="hljs-number">2</span>, <span class="hljs-number">2</span>)))<br>model.add(layers.Conv2D(<span class="hljs-number">64</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> layers<br><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> models<br><br>model = models.Sequential()<br>model.add(layers.Conv2D(<span class="hljs-number">32</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>, input_shape=(<span class="hljs-number">28</span>, <span class="hljs-number">28</span>, <span class="hljs-number">1</span>)))<br>model.add(layers.MaxPooling2D((<span class="hljs-number">2</span>, <span class="hljs-number">2</span>)))<br>model.add(layers.Conv2D(<span class="hljs-number">64</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>model.add(layers.MaxPooling2D((<span class="hljs-number">2</span>, <span class="hljs-number">2</span>)))<br>model.add(layers.Conv2D(<span class="hljs-number">64</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br></code></pre></td></tr></table></figure>
 
 <p>Let’s display the architecture of our convnet so far:</p>
-<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">model.summary()<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">model.summary()<br></code></pre></td></tr></table></figure>
 
-<div class="hljs code-wrapper"><pre><code>_________________________________________________________________
+<pre><code>_________________________________________________________________
 Layer (type)                 Output Shape              Param #   
 =================================================================
 conv2d_1 (Conv2D)            (None, 26, 26, 32)        320       
@@ -293,15 +293,15 @@ Total params: 55,744
 Trainable params: 55,744
 Non-trainable params: 0
 _________________________________________________________________
-</code></pre></div>
+</code></pre>
 <p>You can see above that the output of every <code>Conv2D</code> and <code>MaxPooling2D</code> layer is a 3D tensor of shape <code>(height, width, channels)</code>. The width<br>and height dimensions tend to shrink as we go deeper in the network. The number of channels is controlled by the first argument passed to<br>the <code>Conv2D</code> layers (e.g. 32 or 64).</p>
 <p>The next step would be to feed our last output tensor (of shape <code>(3, 3, 64)</code>) into a densely-connected classifier network like those you are<br>already familiar with: a stack of <code>Dense</code> layers. These classifiers process vectors, which are 1D, whereas our current output is a 3D tensor.<br>So first, we will have to flatten our 3D outputs to 1D, and then add a few <code>Dense</code> layers on top:</p>
-<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">model.add(layers.Flatten())<br>model.add(layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>model.add(layers.Dense(<span class="hljs-number">10</span>, activation=<span class="hljs-string">&#x27;softmax&#x27;</span>))<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">model.add(layers.Flatten())<br>model.add(layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>model.add(layers.Dense(<span class="hljs-number">10</span>, activation=<span class="hljs-string">&#x27;softmax&#x27;</span>))<br></code></pre></td></tr></table></figure>
 
 <p>We are going to do 10-way classification, so we use a final layer with 10 outputs and a softmax activation. Now here’s what our network<br>looks like:</p>
-<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">model.summary()<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">model.summary()<br></code></pre></td></tr></table></figure>
 
-<div class="hljs code-wrapper"><pre><code>_________________________________________________________________
+<pre><code>_________________________________________________________________
 Layer (type)                 Output Shape              Param #   
 =================================================================
 conv2d_1 (Conv2D)            (None, 26, 26, 32)        320       
@@ -324,15 +324,15 @@ Total params: 93,322
 Trainable params: 93,322
 Non-trainable params: 0
 _________________________________________________________________
-</code></pre></div>
+</code></pre>
 <p>As you can see, our <code>(3, 3, 64)</code> outputs were flattened into vectors of shape <code>(576,)</code>, before going through two <code>Dense</code> layers.</p>
 <p>Now, let’s train our convnet on the MNIST digits. We will reuse a lot of the code we have already covered in the MNIST example from Chapter<br>2.</p>
-<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras.datasets <span class="hljs-keyword">import</span> mnist<br><span class="hljs-keyword">from</span> keras.utils <span class="hljs-keyword">import</span> to_categorical<br><br>(train_images, train_labels), (test_images, test_labels) = mnist.load_data()<br><br>train_images = train_images.reshape((<span class="hljs-number">60000</span>, <span class="hljs-number">28</span>, <span class="hljs-number">28</span>, <span class="hljs-number">1</span>))<br>train_images = train_images.astype(<span class="hljs-string">&#x27;float32&#x27;</span>) / <span class="hljs-number">255</span><br><br>test_images = test_images.reshape((<span class="hljs-number">10000</span>, <span class="hljs-number">28</span>, <span class="hljs-number">28</span>, <span class="hljs-number">1</span>))<br>test_images = test_images.astype(<span class="hljs-string">&#x27;float32&#x27;</span>) / <span class="hljs-number">255</span><br><br>train_labels = to_categorical(train_labels)<br>test_labels = to_categorical(test_labels)<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras.datasets <span class="hljs-keyword">import</span> mnist<br><span class="hljs-keyword">from</span> keras.utils <span class="hljs-keyword">import</span> to_categorical<br><br>(train_images, train_labels), (test_images, test_labels) = mnist.load_data()<br><br>train_images = train_images.reshape((<span class="hljs-number">60000</span>, <span class="hljs-number">28</span>, <span class="hljs-number">28</span>, <span class="hljs-number">1</span>))<br>train_images = train_images.astype(<span class="hljs-string">&#x27;float32&#x27;</span>) / <span class="hljs-number">255</span><br><br>test_images = test_images.reshape((<span class="hljs-number">10000</span>, <span class="hljs-number">28</span>, <span class="hljs-number">28</span>, <span class="hljs-number">1</span>))<br>test_images = test_images.astype(<span class="hljs-string">&#x27;float32&#x27;</span>) / <span class="hljs-number">255</span><br><br>train_labels = to_categorical(train_labels)<br>test_labels = to_categorical(test_labels)<br></code></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">model.<span class="hljs-built_in">compile</span>(optimizer=<span class="hljs-string">&#x27;rmsprop&#x27;</span>,<br>              loss=<span class="hljs-string">&#x27;categorical_crossentropy&#x27;</span>,<br>              metrics=[<span class="hljs-string">&#x27;accuracy&#x27;</span>])<br>model.fit(train_images, train_labels, epochs=<span class="hljs-number">5</span>, batch_size=<span class="hljs-number">64</span>)<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">model.<span class="hljs-built_in">compile</span>(optimizer=<span class="hljs-string">&#x27;rmsprop&#x27;</span>,<br>              loss=<span class="hljs-string">&#x27;categorical_crossentropy&#x27;</span>,<br>              metrics=[<span class="hljs-string">&#x27;accuracy&#x27;</span>])<br>model.fit(train_images, train_labels, epochs=<span class="hljs-number">5</span>, batch_size=<span class="hljs-number">64</span>)<br></code></pre></td></tr></table></figure>
 
-<div class="hljs code-wrapper"><pre><code>Epoch 1/5
+<pre><code>Epoch 1/5
 60000/60000 [==============================] - 8s - loss: 0.1766 - acc: 0.9440     
 Epoch 2/5
 60000/60000 [==============================] - 7s - loss: 0.0462 - acc: 0.9855     
@@ -348,19 +348,19 @@ Epoch 5/5
 
 
 &lt;keras.callbacks.History at 0x7fbd9c4cd828&gt;
-</code></pre></div>
+</code></pre>
 <p>Let’s evaluate the model on the test data:</p>
-<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">test_loss, test_acc = model.evaluate(test_images, test_labels)<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">test_loss, test_acc = model.evaluate(test_images, test_labels)<br></code></pre></td></tr></table></figure>
 
-<div class="hljs code-wrapper"><pre><code> 9536/10000 [===========================&gt;..] - ETA: 0s
-</code></pre></div>
-<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">test_acc<br></code></pre></div></td></tr></table></figure>
-
-
+<pre><code> 9536/10000 [===========================&gt;..] - ETA: 0s
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">test_acc<br></code></pre></td></tr></table></figure>
 
 
-<div class="hljs code-wrapper"><pre><code>0.99129999999999996
-</code></pre></div>
+
+
+<pre><code>0.99129999999999996
+</code></pre>
 <p>While our densely-connected network from Chapter 2 had a test accuracy of 97.8%, our basic convnet has a test accuracy of 99.3%: we<br>decreased our error rate by 68% (relative). Not bad! </p>
 
             </div>
