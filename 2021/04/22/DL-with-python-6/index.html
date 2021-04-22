@@ -368,6 +368,22 @@ Epoch 5/5
             <div>
               <div class="post-metas mb-3">
                 
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Deep-Learning/">Deep Learning</a>
+                    
+                      <a class="hover-with-bg" href="/categories/Deep-Learning/Coding/">Coding</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/DL-code/">DL code</a>
+                    
+                  </div>
                 
               </div>
               
@@ -410,14 +426,12 @@ Epoch 5/5
                   
                 
                 
-  <div id="valine"></div>
+  <div id="waline"></div>
   <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
-        new Valine({
-          el: "#valine",
-          app_id: "akUjEbi5JLtJ7nAh3H8oqIFy-gzGzoHsz",
-          app_key: "t0benWaptdoiXv7955E5IxGq",
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@waline/client@0.14.8/dist/Waline.min.js', function () {
+        new Waline({
+          el: "#waline",
           placeholder: "说点什么",
           path: window.location.pathname,
           avatar: "retro",
@@ -425,8 +439,13 @@ Epoch 5/5
           pageSize: "10",
           lang: "zh-CN",
           highlight: true,
-          recordIP: true,
-          serverURLs: "true",
+          serverURL: "http://gzzyyxh.cn",
+          avatarCDN: "",
+          avatarForce: true,
+          requiredFields: [],
+          emojiCDN: "",
+          emojiMaps: {},
+          anonymous: null,
         });
       });
     });
