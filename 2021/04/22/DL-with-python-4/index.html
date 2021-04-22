@@ -1,0 +1,737 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/avatar.png">
+  <link rel="icon" href="/img/avatar.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="3.7-predicting-house-prices">
+  <meta name="author" content="游隼">
+  <meta name="keywords" content="">
+  
+  <title>DL with python-4 - 游隼</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"gzzyyxh.github.io","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":false,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>丰之余</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-comment"></i>
+                留言板
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="DL with python-4">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-04-22 23:17" pubdate>
+        2021年4月22日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.7k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      54
+       分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">DL with python-4</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：几秒前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>3.7-predicting-house-prices</p>
+<span id="more"></span>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> keras<br>keras.__version__<br></code></pre></td></tr></table></figure>
+
+<p>Using TensorFlow backend.</p>
+<p>‘2.0.8’</p>
+<h1 id="Predicting-house-prices-a-regression-example"><a href="#Predicting-house-prices-a-regression-example" class="headerlink" title="Predicting house prices: a regression example"></a>Predicting house prices: a regression example</h1><p>This notebook contains the code samples found in Chapter 3, Section 6 of <a target="_blank" rel="noopener" href="https://www.manning.com/books/deep-learning-with-python?a_aid=keras&a_bid=76564dff">Deep Learning with Python</a>. Note that the original text features far more content, in particular further explanations and figures: in this notebook, you will only find source code and related comments.</p>
+<hr>
+<p>In our two previous examples, we were considering classification problems, where the goal was to predict a single discrete label of an<br>input data point. Another common type of machine learning problem is “regression”, which consists of predicting a continuous value instead<br>of a discrete label. For instance, predicting the temperature tomorrow, given meteorological data, or predicting the time that a<br>software project will take to complete, given its specifications.</p>
+<p>Do not mix up “regression” with the algorithm “logistic regression”: confusingly, “logistic regression” is not a regression algorithm,<br>it is a classification algorithm.</p>
+<h2 id="The-Boston-Housing-Price-dataset"><a href="#The-Boston-Housing-Price-dataset" class="headerlink" title="The Boston Housing Price dataset"></a>The Boston Housing Price dataset</h2><p>We will be attempting to predict the median price of homes in a given Boston suburb in the mid-1970s, given a few data points about the<br>suburb at the time, such as the crime rate, the local property tax rate, etc.</p>
+<p>The dataset we will be using has another interesting difference from our two previous examples: it has very few data points, only 506 in<br>total, split between 404 training samples and 102 test samples, and each “feature” in the input data (e.g. the crime rate is a feature) has<br>a different scale. For instance some values are proportions, which take a values between 0 and 1, others take values between 1 and 12,<br>others between 0 and 100…</p>
+<p>Let’s take a look at the data:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras.datasets <span class="hljs-keyword">import</span> boston_housing<br><br>(train_data, train_targets), (test_data, test_targets) =  boston_housing.load_data()<br></code></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">train_data.shape<br></code></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(404, 13)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">test_data.shape<br></code></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(102, 13)
+</code></pre>
+<p>As you can see, we have 404 training samples and 102 test samples. The data comprises 13 features. The 13 features in the input data are as<br>follow:</p>
+<ol>
+<li>Per capita crime rate.</li>
+<li>Proportion of residential land zoned for lots over 25,000 square feet.</li>
+<li>Proportion of non-retail business acres per town.</li>
+<li>Charles River dummy variable (= 1 if tract bounds river; 0 otherwise).</li>
+<li>Nitric oxides concentration (parts per 10 million).</li>
+<li>Average number of rooms per dwelling.</li>
+<li>Proportion of owner-occupied units built prior to 1940.</li>
+<li>Weighted distances to five Boston employment centres.</li>
+<li>Index of accessibility to radial highways.</li>
+<li>Full-value property-tax rate per $10,000.</li>
+<li>Pupil-teacher ratio by town.</li>
+<li>1000 * (Bk - 0.63) ** 2 where Bk is the proportion of Black people by town.</li>
+<li>% lower status of the population.</li>
+</ol>
+<p>The targets are the median values of owner-occupied homes, in thousands of dollars:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">train_targets<br></code></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([ 15.2,  42.3,  50. ,  21.1,  17.7,  18.5,  11.3,  15.6,  15.6,
+        14.4,  12.1,  17.9,  23.1,  19.9,  15.7,   8.8,  50. ,  22.5,
+        24.1,  27.5,  10.9,  30.8,  32.9,  24. ,  18.5,  13.3,  22.9,
+        34.7,  16.6,  17.5,  22.3,  16.1,  14.9,  23.1,  34.9,  25. ,
+        13.9,  13.1,  20.4,  20. ,  15.2,  24.7,  22.2,  16.7,  12.7,
+        15.6,  18.4,  21. ,  30.1,  15.1,  18.7,   9.6,  31.5,  24.8,
+        19.1,  22. ,  14.5,  11. ,  32. ,  29.4,  20.3,  24.4,  14.6,
+        19.5,  14.1,  14.3,  15.6,  10.5,   6.3,  19.3,  19.3,  13.4,
+        36.4,  17.8,  13.5,  16.5,   8.3,  14.3,  16. ,  13.4,  28.6,
+        43.5,  20.2,  22. ,  23. ,  20.7,  12.5,  48.5,  14.6,  13.4,
+        23.7,  50. ,  21.7,  39.8,  38.7,  22.2,  34.9,  22.5,  31.1,
+        28.7,  46. ,  41.7,  21. ,  26.6,  15. ,  24.4,  13.3,  21.2,
+        11.7,  21.7,  19.4,  50. ,  22.8,  19.7,  24.7,  36.2,  14.2,
+        18.9,  18.3,  20.6,  24.6,  18.2,   8.7,  44. ,  10.4,  13.2,
+        21.2,  37. ,  30.7,  22.9,  20. ,  19.3,  31.7,  32. ,  23.1,
+        18.8,  10.9,  50. ,  19.6,   5. ,  14.4,  19.8,  13.8,  19.6,
+        23.9,  24.5,  25. ,  19.9,  17.2,  24.6,  13.5,  26.6,  21.4,
+        11.9,  22.6,  19.6,   8.5,  23.7,  23.1,  22.4,  20.5,  23.6,
+        18.4,  35.2,  23.1,  27.9,  20.6,  23.7,  28. ,  13.6,  27.1,
+        23.6,  20.6,  18.2,  21.7,  17.1,   8.4,  25.3,  13.8,  22.2,
+        18.4,  20.7,  31.6,  30.5,  20.3,   8.8,  19.2,  19.4,  23.1,
+        23. ,  14.8,  48.8,  22.6,  33.4,  21.1,  13.6,  32.2,  13.1,
+        23.4,  18.9,  23.9,  11.8,  23.3,  22.8,  19.6,  16.7,  13.4,
+        22.2,  20.4,  21.8,  26.4,  14.9,  24.1,  23.8,  12.3,  29.1,
+        21. ,  19.5,  23.3,  23.8,  17.8,  11.5,  21.7,  19.9,  25. ,
+        33.4,  28.5,  21.4,  24.3,  27.5,  33.1,  16.2,  23.3,  48.3,
+        22.9,  22.8,  13.1,  12.7,  22.6,  15. ,  15.3,  10.5,  24. ,
+        18.5,  21.7,  19.5,  33.2,  23.2,   5. ,  19.1,  12.7,  22.3,
+        10.2,  13.9,  16.3,  17. ,  20.1,  29.9,  17.2,  37.3,  45.4,
+        17.8,  23.2,  29. ,  22. ,  18. ,  17.4,  34.6,  20.1,  25. ,
+        15.6,  24.8,  28.2,  21.2,  21.4,  23.8,  31. ,  26.2,  17.4,
+        37.9,  17.5,  20. ,   8.3,  23.9,   8.4,  13.8,   7.2,  11.7,
+        17.1,  21.6,  50. ,  16.1,  20.4,  20.6,  21.4,  20.6,  36.5,
+         8.5,  24.8,  10.8,  21.9,  17.3,  18.9,  36.2,  14.9,  18.2,
+        33.3,  21.8,  19.7,  31.6,  24.8,  19.4,  22.8,   7.5,  44.8,
+        16.8,  18.7,  50. ,  50. ,  19.5,  20.1,  50. ,  17.2,  20.8,
+        19.3,  41.3,  20.4,  20.5,  13.8,  16.5,  23.9,  20.6,  31.5,
+        23.3,  16.8,  14. ,  33.8,  36.1,  12.8,  18.3,  18.7,  19.1,
+        29. ,  30.1,  50. ,  50. ,  22. ,  11.9,  37.6,  50. ,  22.7,
+        20.8,  23.5,  27.9,  50. ,  19.3,  23.9,  22.6,  15.2,  21.7,
+        19.2,  43.8,  20.3,  33.2,  19.9,  22.5,  32.7,  22. ,  17.1,
+        19. ,  15. ,  16.1,  25.1,  23.7,  28.7,  37.2,  22.6,  16.4,
+        25. ,  29.8,  22.1,  17.4,  18.1,  30.3,  17.5,  24.7,  12.6,
+        26.5,  28.7,  13.3,  10.4,  24.4,  23. ,  20. ,  17.8,   7. ,
+        11.8,  24.4,  13.8,  19.4,  25.2,  19.4,  19.4,  29.1])
+</code></pre>
+<p>The prices are typically between $10,000 and $50,000. If that sounds cheap, remember this was the mid-1970s, and these prices are not<br>inflation-adjusted.</p>
+<h2 id="Preparing-the-data"><a href="#Preparing-the-data" class="headerlink" title="Preparing the data"></a>Preparing the data</h2><p>It would be problematic to feed into a neural network values that all take wildly different ranges. The network might be able to<br>automatically adapt to such heterogeneous data, but it would definitely make learning more difficult. A widespread best practice to deal<br>with such data is to do feature-wise normalization: for each feature in the input data (a column in the input data matrix), we<br>will subtract the mean of the feature and divide by the standard deviation, so that the feature will be centered around 0 and will have a<br>unit standard deviation. This is easily done in Numpy:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">mean = train_data.mean(axis=<span class="hljs-number">0</span>)<br>train_data -= mean<br>std = train_data.std(axis=<span class="hljs-number">0</span>)<br>train_data /= std<br><br>test_data -= mean<br>test_data /= std<br></code></pre></td></tr></table></figure>
+
+
+<p>Note that the quantities that we use for normalizing the test data have been computed using the training data. We should never use in our<br>workflow any quantity computed on the test data, even for something as simple as data normalization.</p>
+<h2 id="Building-our-network"><a href="#Building-our-network" class="headerlink" title="Building our network"></a>Building our network</h2><p>Because so few samples are available, we will be using a very small network with two<br>hidden layers, each with 64 units. In general, the less training data you have, the worse overfitting will be, and using<br>a small network is one way to mitigate overfitting.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> models<br><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> layers<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">build_model</span>():</span><br>    <span class="hljs-comment"># Because we will need to instantiate</span><br>    <span class="hljs-comment"># the same model multiple times,</span><br>    <span class="hljs-comment"># we use a function to construct it.</span><br>    model = models.Sequential()<br>    model.add(layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>,<br>                           input_shape=(train_data.shape[<span class="hljs-number">1</span>],)))<br>    model.add(layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>    model.add(layers.Dense(<span class="hljs-number">1</span>))<br>    model.<span class="hljs-built_in">compile</span>(optimizer=<span class="hljs-string">&#x27;rmsprop&#x27;</span>, loss=<span class="hljs-string">&#x27;mse&#x27;</span>, metrics=[<span class="hljs-string">&#x27;mae&#x27;</span>])<br>    <span class="hljs-keyword">return</span> model<br></code></pre></td></tr></table></figure>
+
+
+<p>Our network ends with a single unit, and no activation (i.e. it will be linear layer).<br>This is a typical setup for scalar regression (i.e. regression where we are trying to predict a single continuous value).<br>Applying an activation function would constrain the range that the output can take; for instance if<br>we applied a <code>sigmoid</code> activation function to our last layer, the network could only learn to predict values between 0 and 1. Here, because<br>the last layer is purely linear, the network is free to learn to predict values in any range.</p>
+<p>Note that we are compiling the network with the <code>mse</code> loss function – Mean Squared Error, the square of the difference between the<br>predictions and the targets, a widely used loss function for regression problems.</p>
+<p>We are also monitoring a new metric during training: <code>mae</code>. This stands for Mean Absolute Error. It is simply the absolute value of the<br>difference between the predictions and the targets. For instance, a MAE of 0.5 on this problem would mean that our predictions are off by<br>$500 on average.</p>
+<h2 id="Validating-our-approach-using-K-fold-validation"><a href="#Validating-our-approach-using-K-fold-validation" class="headerlink" title="Validating our approach using K-fold validation"></a>Validating our approach using K-fold validation</h2><p>To evaluate our network while we keep adjusting its parameters (such as the number of epochs used for training), we could simply split the<br>data into a training set and a validation set, as we were doing in our previous examples. However, because we have so few data points, the<br>validation set would end up being very small (e.g. about 100 examples). A consequence is that our validation scores may change a lot<br>depending on <em>which</em> data points we choose to use for validation and which we choose for training, i.e. the validation scores may have a<br>high <em>variance</em> with regard to the validation split. This would prevent us from reliably evaluating our model.</p>
+<p>The best practice in such situations is to use K-fold cross-validation. It consists of splitting the available data into K partitions<br>(typically K=4 or 5), then instantiating K identical models, and training each one on K-1 partitions while evaluating on the remaining<br>partition. The validation score for the model used would then be the average of the K validation scores obtained.</p>
+<p>In terms of code, this is straightforward:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br>k = <span class="hljs-number">4</span><br>num_val_samples = <span class="hljs-built_in">len</span>(train_data) // k<br>num_epochs = <span class="hljs-number">100</span><br>all_scores = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(k):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;processing fold #&#x27;</span>, i)<br>    <span class="hljs-comment"># Prepare the validation data: data from partition # k</span><br>    val_data = train_data[i * num_val_samples: (i + <span class="hljs-number">1</span>) * num_val_samples]<br>    val_targets = train_targets[i * num_val_samples: (i + <span class="hljs-number">1</span>) * num_val_samples]<br><br>    <span class="hljs-comment"># Prepare the training data: data from all other partitions</span><br>    partial_train_data = np.concatenate(<br>        [train_data[:i * num_val_samples],<br>         train_data[(i + <span class="hljs-number">1</span>) * num_val_samples:]],<br>        axis=<span class="hljs-number">0</span>)<br>    partial_train_targets = np.concatenate(<br>        [train_targets[:i * num_val_samples],<br>         train_targets[(i + <span class="hljs-number">1</span>) * num_val_samples:]],<br>        axis=<span class="hljs-number">0</span>)<br><br>    <span class="hljs-comment"># Build the Keras model (already compiled)</span><br>    model = build_model()<br>    <span class="hljs-comment"># Train the model (in silent mode, verbose=0)</span><br>    model.fit(partial_train_data, partial_train_targets,<br>              epochs=num_epochs, batch_size=<span class="hljs-number">1</span>, verbose=<span class="hljs-number">0</span>)<br>    <span class="hljs-comment"># Evaluate the model on the validation data</span><br>    val_mse, val_mae = model.evaluate(val_data, val_targets, verbose=<span class="hljs-number">0</span>)<br>    all_scores.append(val_mae)<br></code></pre></td></tr></table></figure>
+
+<pre><code>processing fold # 0
+processing fold # 1
+processing fold # 2
+processing fold # 3
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">all_scores<br></code></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>[2.0750808349930412, 2.117215852926273, 2.9140411863232605, 2.4288365227161068]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">np.mean(all_scores)<br></code></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>2.3837935992396706
+</code></pre>
+<p>As you can notice, the different runs do indeed show rather different validation scores, from 2.1 to 2.9. Their average (2.4) is a much more<br>reliable metric than any single of these scores – that’s the entire point of K-fold cross-validation. In this case, we are off by $2,400 on<br>average, which is still significant considering that the prices range from $10,000 to $50,000. </p>
+<p>Let’s try training the network for a bit longer: 500 epochs. To keep a record of how well the model did at each epoch, we will modify our training loop<br>to save the per-epoch validation score log:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> keras <span class="hljs-keyword">import</span> backend <span class="hljs-keyword">as</span> K<br><br><span class="hljs-comment"># Some memory clean-up</span><br>K.clear_session()<br></code></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs python">num_epochs = <span class="hljs-number">500</span><br>all_mae_histories = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(k):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;processing fold #&#x27;</span>, i)<br>    <span class="hljs-comment"># Prepare the validation data: data from partition # k</span><br>    val_data = train_data[i * num_val_samples: (i + <span class="hljs-number">1</span>) * num_val_samples]<br>    val_targets = train_targets[i * num_val_samples: (i + <span class="hljs-number">1</span>) * num_val_samples]<br><br>    <span class="hljs-comment"># Prepare the training data: data from all other partitions</span><br>    partial_train_data = np.concatenate(<br>        [train_data[:i * num_val_samples],<br>         train_data[(i + <span class="hljs-number">1</span>) * num_val_samples:]],<br>        axis=<span class="hljs-number">0</span>)<br>    partial_train_targets = np.concatenate(<br>        [train_targets[:i * num_val_samples],<br>         train_targets[(i + <span class="hljs-number">1</span>) * num_val_samples:]],<br>        axis=<span class="hljs-number">0</span>)<br><br>    <span class="hljs-comment"># Build the Keras model (already compiled)</span><br>    model = build_model()<br>    <span class="hljs-comment"># Train the model (in silent mode, verbose=0)</span><br>    history = model.fit(partial_train_data, partial_train_targets,<br>                        validation_data=(val_data, val_targets),<br>                        epochs=num_epochs, batch_size=<span class="hljs-number">1</span>, verbose=<span class="hljs-number">0</span>)<br>    mae_history = history.history[<span class="hljs-string">&#x27;val_mean_absolute_error&#x27;</span>]<br>    all_mae_histories.append(mae_history)<br></code></pre></td></tr></table></figure>
+
+<pre><code>processing fold # 0
+processing fold # 1
+processing fold # 2
+processing fold # 3
+</code></pre>
+<p>We can then compute the average of the per-epoch MAE scores for all folds:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">average_mae_history = [<br>    np.mean([x[i] <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> all_mae_histories]) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_epochs)]<br></code></pre></td></tr></table></figure>
+
+<p>Let’s plot this:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><br>plt.plot(<span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-built_in">len</span>(average_mae_history) + <span class="hljs-number">1</span>), average_mae_history)<br>plt.xlabel(<span class="hljs-string">&#x27;Epochs&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;Validation MAE&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="output_26_0.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>It may be a bit hard to see the plot due to scaling issues and relatively high variance. Let’s:</p>
+<ul>
+<li>Omit the first 10 data points, which are on a different scale from the rest of the curve.</li>
+<li>Replace each point with an exponential moving average of the previous points, to obtain a smooth curve.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">smooth_curve</span>(<span class="hljs-params">points, factor=<span class="hljs-number">0.9</span></span>):</span><br>  smoothed_points = []<br>  <span class="hljs-keyword">for</span> point <span class="hljs-keyword">in</span> points:<br>    <span class="hljs-keyword">if</span> smoothed_points:<br>      previous = smoothed_points[-<span class="hljs-number">1</span>]<br>      smoothed_points.append(previous * factor + point * (<span class="hljs-number">1</span> - factor))<br>    <span class="hljs-keyword">else</span>:<br>      smoothed_points.append(point)<br>  <span class="hljs-keyword">return</span> smoothed_points<br><br>smooth_mae_history = smooth_curve(average_mae_history[<span class="hljs-number">10</span>:])<br><br>plt.plot(<span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-built_in">len</span>(smooth_mae_history) + <span class="hljs-number">1</span>), smooth_mae_history)<br>plt.xlabel(<span class="hljs-string">&#x27;Epochs&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;Validation MAE&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="output_28_0.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>According to this plot, it seems that validation MAE stops improving significantly after 80 epochs. Past that point, we start overfitting.</p>
+<p>Once we are done tuning other parameters of our model (besides the number of epochs, we could also adjust the size of the hidden layers), we<br>can train a final “production” model on all of the training data, with the best parameters, then look at its performance on the test data:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Get a fresh, compiled model.</span><br>model = build_model()<br><span class="hljs-comment"># Train it on the entirety of the data.</span><br>model.fit(train_data, train_targets,<br>          epochs=<span class="hljs-number">80</span>, batch_size=<span class="hljs-number">16</span>, verbose=<span class="hljs-number">0</span>)<br>test_mse_score, test_mae_score = model.evaluate(test_data, test_targets)<br></code></pre></td></tr></table></figure>
+
+<pre><code> 32/102 [========&gt;.....................] - ETA: 0s
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">test_mae_score<br></code></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>2.5532484335057877
+</code></pre>
+<p>We are still off by about $2,550.</p>
+<h2 id="Wrapping-up"><a href="#Wrapping-up" class="headerlink" title="Wrapping up"></a>Wrapping up</h2><p>Here’s what you should take away from this example:</p>
+<ul>
+<li>Regression is done using different loss functions from classification; Mean Squared Error (MSE) is a commonly used loss function for<br>regression.</li>
+<li>Similarly, evaluation metrics to be used for regression differ from those used for classification; naturally the concept of “accuracy”<br>does not apply for regression. A common regression metric is Mean Absolute Error (MAE).</li>
+<li>When features in the input data have values in different ranges, each feature should be scaled independently as a preprocessing step.</li>
+<li>When there is little data available, using K-Fold validation is a great way to reliably evaluate a model.</li>
+<li>When little training data is available, it is preferable to use a small network with very few hidden layers (typically only one or two),<br>in order to avoid severe overfitting.</li>
+</ul>
+<p>This example concludes our series of three introductory practical examples. You are now able to handle common types of problems with vector data input:</p>
+<ul>
+<li>Binary (2-class) classification.</li>
+<li>Multi-class, single-label classification.</li>
+<li>Scalar regression.</li>
+</ul>
+<p>In the next chapter, you will acquire a more formal understanding of some of the concepts you have encountered in these first examples,<br>such as data preprocessing, model evaluation, and overfitting.</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/22/DL-with-python-3/">
+                        <span class="hidden-mobile">DL with python-3</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "akUjEbi5JLtJ7nAh3H8oqIFy-gzGzoHsz",
+          app_key: "t0benWaptdoiXv7955E5IxGq",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: true,
+          serverURLs: "true",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+  <div class="col-lg-7 mx-auto nopadding-x-md">
+    <div class="container custom post-custom mx-auto">
+      <img src="https://octodex.github.com/images/jetpacktocat.png" srcset="/img/loading.gif" lazyload class="rounded mx-auto d-block mt-5" style="width:150px; height:150px;">
+    </div>
+  </div>
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
