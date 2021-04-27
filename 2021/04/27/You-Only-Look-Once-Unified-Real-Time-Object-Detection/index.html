@@ -209,7 +209,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      5.8k 字
+      3k 字
     </span>
   
 
@@ -219,7 +219,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      80
+      36
        分钟
     </span>
   
@@ -264,11 +264,9 @@
 <span id="more"></span>
 
 
-
 	<div class="row">
     <embed src="./YOLOv1.pdf" width="100%" height="550" type="application/pdf">
 	</div>
-
 
 
 
@@ -302,13 +300,13 @@
 <li>将一幅图像分成 S×S 个网格(Grid Cell)，如果某个object的中心落在某个网格中（通过ground-truth框确定），则这个网格就负责预测这个object。</li>
 <li>每个网格要预测B个bounding box，每个box除了要回归自身的位置之外，还要附带预测一个confidence值。这个值代表了所预测的bounding box中是否含有object和若有object，这个object预测得有多准的两重信息，计算方式：</li>
 </ol>
-<p>$$<br>\operatorname{Pr}(\text { Object }) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}<br>$$</p>
-<p>如果有object的中心落在一个网格里面，*的前第一项取1，否则取0。第二项是预测的边界框和ground-truth之间的IoU值。</p>
+<script type="math/tex; mode=display">
+\operatorname{Pr}(\text { Object }) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}</script><p>如果有object的中心落在一个网格里面，*的前第一项取1，否则取0。第二项是预测的边界框和ground-truth之间的IoU值。</p>
 <ol>
-<li>每个网格单元针对20种类别预测bboxes属于单个类别的条件概率$\operatorname{Pr}\left(\text { Class }_{i} \mid \text { Object }\right)$,属于同一个网格的B个bboxes共享一个条件概率。在测试时，将条件概率分别和单个的bbox的confidence预测相乘：</li>
+<li>每个网格单元针对20种类别预测bboxes属于单个类别的条件概率<script type="math/tex">\operatorname{Pr}\left(\text { Class }_{i} \mid \text { Object }\right)</script>,属于同一个网格的B个bboxes共享一个条件概率。在测试时，将条件概率分别和单个的bbox的confidence预测相乘：</li>
 </ol>
-<p>$$<br>\operatorname{Pr}\left(\text { Class }<em>{i} \mid \text { Object }\right) * \operatorname{Pr}(\text { Object }) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}=\operatorname{Pr}\left(\text { Class }</em>{i}\right) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}<br>$$</p>
-<ol start="4">
+<script type="math/tex; mode=display">
+\operatorname{Pr}\left(\text { Class }_{i} \mid \text { Object }\right) * \operatorname{Pr}(\text { Object }) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}=\operatorname{Pr}\left(\text { Class }_{i}\right) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}</script><ol>
 <li>在Pascal VOC中，YOLO检测系统的图像输入为448×448，S=7，B=2，一共有20个class（C=20），输出就是7×7×30的一个tensor。这个是怎么算出来的呢？看下面详解。</li>
 </ol>
 <h2 id="YOLO-网络设计"><a href="#YOLO-网络设计" class="headerlink" title="YOLO 网络设计"></a>YOLO 网络设计</h2><p><img src="/img/4.28/3.png" srcset="/img/loading.gif" lazyload alt="YOLO网络结构"></p>
@@ -317,29 +315,29 @@
 <p>YOLO网络借鉴了GoogleNet的思想，但与之不同的是，为了更好的性能，它增加额外的4层卷积层（conv）。YOLO一共使用了24个级联的卷积层和2个全连接层（fc），其中conv层中包含了1×1和3×3两种kernel，最后一个fc全连接层后经过reshape之后就是YOLO网络的输出，是长度为S×S×(B×5+C)=7×7×30的tensor，最后经过识别过程得到最终的检测结果。</p>
 <p><img src="/img/4.28/5.png" srcset="/img/loading.gif" lazyload alt="1x1x30 tensor解释"></p>
 <p>上文说到每个bounding box要预测(x,y,w,h,confidence)五个值，一张图片共分为S×S个网格，每个网格要预测出B个bounding box和一个网格负责的object的类别信息，记为C。</p>
-<p>则输出为$S<em>S</em>(5*B+C)$的tensor张量，(x,y)表示bounding box相对于网格单元的边界的offset，归一化到(0,1)范围之内，而w,h表示相对于整个图片的预测宽和高，也被归一化到(0,1)范围内，c代表的是object在某个bounding box的confidence。</p>
+<p>则输出为<script type="math/tex">S *S* ( 5 *B + C )</script>的tensor张量，(x,y)表示bounding box相对于网格单元的边界的offset，归一化到(0,1)范围之内，而w,h表示相对于整个图片的预测宽和高，也被归一化到(0,1)范围内，c代表的是object在某个bounding box的confidence。</p>
 <p>使用下图更形象的说明，7×7×30的Tensor中的一个1×1×30的前10维的所代表的含义。</p>
 <h3 id="归一化"><a href="#归一化" class="headerlink" title="归一化"></a>归一化</h3><p>下面解释如何将预测坐标的x,y用相对于对应网格的offset归一化到0-1和w,h是如何利用图像的宽高归一化到0-1之间。</p>
-<p>每个单元格预测的B个(x,y,w,h,confidence)向量，假设图片为S×S个网格，S=7，图片宽为$w_{i}$高为$h_{i}$：</p>
+<p>每个单元格预测的B个(x,y,w,h,confidence)向量，假设图片为S×S个网格，S=7，图片宽为<script type="math/tex">w_{i}</script>高为<script type="math/tex">h_{i}</script>：</p>
 <ol>
-<li>（x,y）是bbox的中心相对于单元格的offset对于下图中蓝色单元格，坐标为$\left(x_{c} o l=1, y_{r} \text { ow }=4\right)$，假设它的预测输出是红色框bbox，设bbox的中心坐标为那么最终预测出来的（x,y）是经过归一化处理的，表示的是相对于单元格的offset，公式：</li>
+<li>（x,y）是bbox的中心相对于单元格的offset对于下图中蓝色单元格，坐标为<script type="math/tex">\left(x_{c} o l=1, y_{r} \text { ow }=4\right)</script>，假设它的预测输出是红色框bbox，设bbox的中心坐标为那么最终预测出来的（x,y）是经过归一化处理的，表示的是相对于单元格的offset，公式：</li>
 </ol>
-<p>$$<br>x=\frac{x_{c}}{w_{i}} * S-x_{\text {col }}, \quad y=\frac{y_{c}}{h_{i}} * S-y_{\text {row }}<br>$$</p>
-<p><img src="/img/4.28/6.png" srcset="/img/loading.gif" lazyload alt="归一化"></p>
-<ol start="2">
+<script type="math/tex; mode=display">
+x=\frac{x_{c}}{w_{i}} * S-x_{\text {col }}, \quad y=\frac{y_{c}}{h_{i}} * S-y_{\text {row }}</script><p><img src="/img/4.28/6.png" srcset="/img/loading.gif" lazyload alt="归一化"></p>
+<ol>
 <li>（w,h）是bbox相对于整个图片的比例预测的bbox的宽高为w_b, h_b，（w,h）表示的是bbox相对于整张图片的占比，公式：</li>
 </ol>
-<p>$$<br>w=\frac{w_{b}}{w_{i}}, h=\frac{h_{b}}{h_{i}}<br>$$</p>
-<h3 id="Inference"><a href="#Inference" class="headerlink" title="Inference"></a>Inference</h3><p><img src="/img/4.28/7.png" srcset="/img/loading.gif" lazyload alt="1x1x30 前10维解释"></p>
+<script type="math/tex; mode=display">
+w=\frac{w_{b}}{w_{i}}, h=\frac{h_{b}}{h_{i}}</script><h3 id="Inference"><a href="#Inference" class="headerlink" title="Inference"></a>Inference</h3><p><img src="/img/4.28/7.png" srcset="/img/loading.gif" lazyload alt="1x1x30 前10维解释"></p>
 <p>每个grid cell对应的两个bounding box的5个值在tensor中体现出来，组成前十维。每个单元格负责预测一个object，但是每个单元格预测出2个bounding box，如图。</p>
 <p><img src="/img/4.28/8.png" srcset="/img/loading.gif" lazyload alt="1x1x30 Tensor的30维解释"></p>
 <p>每个grid cell有30维，其中8维是两个预测回归bboxes的坐标信息，2维是bboxes的confidences，还有20维是与类别相关的信息。</p>
 <p><img src="/img/4.28/9.png" srcset="/img/loading.gif" lazyload alt="20维中每个值表示此object在此bbox中的时候属于class_i的概率分数"></p>
 <p><img src="/img/4.28/10.png" srcset="/img/loading.gif" lazyload alt="类别预测分数的计算"></p>
 <p><img src="/img/4.28/11.png" srcset="/img/loading.gif" lazyload alt="类别预测分数的计算"></p>
-<p>每个单元格预测一个属于类别class $<em>{i}$的条件概率$\operatorname{Pr}\left(\right.$ Class $</em>{i} \mid$ Object $)$。要注意的是，属于一个网格的2个bboxs共享一套条件概率值，因为这两个box都是为了一个grid cell服务，最终预测出一个object类别。在测试时，将条件概率和单个bbox的confidence预测相乘：</p>
-<p>$$<br>\operatorname{Pr}\left(\text { Class }<em>{i} \mid \text { Object }\right) * \operatorname{Pr}(\text { Object }) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}=\operatorname{Pr}\left(\text { Class }</em>{i}\right) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}<br>$$</p>
-<p>如上式所述，每个网格预测的类别概率乘以每个bbox的预测confidence，得到每个bbox的class-specific confidence score分数。对每个格子的每一个bounding box进行此运算，最后会得到7×7×2=98个scores，设置一个阈值，滤掉得分低的bboxes，对保留的bboxes进行NMS（Non Maximum Suppression）处理，最终得到目标检测结果。</p>
+<p>每个单元格预测一个属于类别<script type="math/tex">class_{i}</script>的条件概率$\operatorname{Pr}\left(\right.$ Class $_{i} \mid$ Object $)$。要注意的是，属于一个网格的2个bboxs共享一套条件概率值，因为这两个box都是为了一个grid cell服务，最终预测出一个object类别。在测试时，将条件概率和单个bbox的confidence预测相乘：</p>
+<script type="math/tex; mode=display">
+\operatorname{Pr}\left(\text { Class }_{i} \mid \text { Object }\right) * \operatorname{Pr}(\text { Object }) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}=\operatorname{Pr}\left(\text { Class }_{i}\right) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}</script><p>如上式所述，每个网格预测的类别概率乘以每个bbox的预测confidence，得到每个bbox的class-specific confidence score分数。对每个格子的每一个bounding box进行此运算，最后会得到7×7×2=98个scores，设置一个阈值，滤掉得分低的bboxes，对保留的bboxes进行NMS（Non Maximum Suppression）处理，最终得到目标检测结果。</p>
 <p><img src="/img/4.28/12.png" srcset="/img/loading.gif" lazyload alt="图像中第一个网格中两个bboxes经过计算后的结果"></p>
 <p><img src="/img/4.28/13.png" srcset="/img/loading.gif" lazyload alt="依次计算最终得到98个附带有score的tensors"></p>
 <p><img src="/img/4.28/14.png" srcset="/img/loading.gif" lazyload alt="依次计算最终得到98个附带有score的tensors"></p>
@@ -371,16 +369,17 @@
 <p>在此损失函数中，只有某个网格中有object的中心落入的时候才对classification loss进行惩罚。只有当某个网格i中的bbox对某的ground-truth box负责的时候，才会对box的coordinate error进行惩罚。哪个bbox对ground-truth box负责就看ground-truth box和bbox的IoU最大。</p>
 <p>Loss相关解释：</p>
 <ol>
-<li>8维的localization error和20维的classification error同样重要显然是不合理的，应该更重视8维的坐标预测，所以作者给这个损失前加了个权重，记为：$\lambda_{\text {coord }}$,在Pascal VOC训练中取5。</li>
-<li>对于不存在object的bbox的confidence loss，赋予了更小的损失权重，记为$\lambda_{\text {noobj }}$，在Pascal VOC中取0.5。若没有任何物体中心落入边界框中，则$\widehat{C}<em>{i}$为0，此时我们希望预测含有物体的置信度$C</em>{i}$越小越好。然而，大部分bbox中都没有object，积少成多，造成loss的第2部分与第3部分的不平衡，因此，在loss的三部分增加权重$\lambda_{\text {noobj }}=0.5$。</li>
-<li>对于存在object的bbox的confidence loss和类别的loss，权重取常数1。对于每个格子而言，作者设计只能包含同种物体。若格子中包含物体，我们希望希望预测正确的类别的概率越接近于1越好，而错误类别的概率越接近于0越好。loss第4部分中，若$\hat{p}_{i}(c)$为0中c为正确类别，则值为1，若非正确类别，则值为0。</li>
-<li>对于第二行中为什么对$w_{i}$和$h_{i}$取平方根处理，原因是：对于一个图像中存在的不同大小的object，小物体的预测框偏离一点和大的相比肯定更严重，而sum-square error loss中对大小object的偏移loss是一同处理的。为了缓和，作者使用开方的方法，将bbox的width和height去平方根代替width和height。我们可以这样理解，假如预测出的小物体(width=10, height=10)的宽比实际大了10pixel，大物体（width=100,height=100）的宽度比实际预测大了10pixel。显然对于小物体，预测大了一倍，我们接受不了，而对大物体来说就影响不大。所以我们就要加大惩罚措施，让小物体预测大了10pixel的后果对于损失函数的值贡献更大，我们通过取平方根$\sqrt{20}-\sqrt{10} \approx 3.4&gt;\sqrt{110}-\sqrt{100} \approx 0.5$，这样也算达到了目的吧。</li>
+<li>8维的localization error和20维的classification error同样重要显然是不合理的，应该更重视8维的坐标预测，所以作者给这个损失前加了个权重，记为：<script type="math/tex">\lambda_{\text {coord }}</script>,在Pascal VOC训练中取5。</li>
+<li>对于不存在object的bbox的confidence loss，赋予了更小的损失权重，记为<script type="math/tex">\lambda_{\text {noobj }}</script>，在Pascal VOC中取0.5。若没有任何物体中心落入边界框中，则<script type="math/tex">\widehat{C}_{i}</script>为0，此时我们希望预测含有物体的置信度<script type="math/tex">C_{i}</script>越小越好。然而，大部分bbox中都没有object，积少成多，造成loss的第2部分与第3部分的不平衡，因此，在loss的三部分增加权重<script type="math/tex">\lambda_{\text {noobj}}=0.5</script>。</li>
+<li>对于存在object的bbox的confidence loss和类别的loss，权重取常数1。对于每个格子而言，作者设计只能包含同种物体。若格子中包含物体，我们希望希望预测正确的类别的概率越接近于1越好，而错误类别的概率越接近于0越好。loss第4部分中，若<script type="math/tex">\hat{p}_{i}(c)</script>为0中c为正确类别，则值为1，若非正确类别，则值为0。</li>
+<li>对于第二行中为什么对<script type="math/tex">w_{i}</script>和<script type="math/tex">h_{i}</script>取平方根处理，原因是：对于一个图像中存在的不同大小的object，小物体的预测框偏离一点和大的相比肯定更严重，而sum-square error loss中对大小object的偏移loss是一同处理的。为了缓和，作者使用开方的方法，将bbox的width和height去平方根代替width和height。我们可以这样理解，假如预测出的小物体(width=10, height=10)的宽比实际大了10pixel，大物体（width=100,height=100）的宽度比实际预测大了10pixel。显然对于小物体，预测大了一倍，我们接受不了，而对大物体来说就影响不大。所以我们就要加大惩罚措施，让小物体预测大了10pixel的后果对于损失函数的值贡献更大，我们通过取平方根<script type="math/tex">\sqrt{20}-\sqrt{10} \approx 3.4>\sqrt{110}-\sqrt{100}\approx 0.5</script>，这样也算达到了目的吧。</li>
 </ol>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><h2 id="与其他检测方法对比"><a href="#与其他检测方法对比" class="headerlink" title="与其他检测方法对比"></a>与其他检测方法对比</h2><p>详见论文。</p>
 <h3 id="在Pascal-VOC-2007上的测试结果"><a href="#在Pascal-VOC-2007上的测试结果" class="headerlink" title="在Pascal VOC 2007上的测试结果"></a>在Pascal VOC 2007上的测试结果</h3><p><img src="/img/4.28/34.png" srcset="/img/loading.gif" lazyload alt="在Pascal VOC 2007 上与其他检测方法的对比"></p>
 <p>Fast YOLO在Pascal数据集上速度最快，达到155FPS，而UOLO的mAP是最高的。</p>
 <h3 id="VOC-2007错误分析"><a href="#VOC-2007错误分析" class="headerlink" title="VOC 2007错误分析"></a>VOC 2007错误分析</h3><p>比较了YOLO和Faster R-CNN的错误情况，结果如图所示。</p>
-<p>预测结果包括以下几类：<br>正确：类别正确，IOU&gt;0.5<br>定位：类别正确，0.1&lt;IOU&lt;0.5<br>类似：类别相似，IOU&gt;0.1<br>其它：类别错误，IOU&gt;0.1<br>背景：任何物体，IOU&lt;0.1</p>
+<p>预测结果包括以下几类：<br>正确：类别正确，IOU&gt;0.5<br>定位：类别正确，0.1<IOU<0.5
+类似：类别相似，IOU>0.1<br>其它：类别错误，IOU&gt;0.1<br>背景：任何物体，IOU&lt;0.1</p>
 <p><img src="/img/4.28/35.png" srcset="/img/loading.gif" lazyload alt="YOLO定位错误率高于Fast R-CNN；Fast R-CNN背景预测错误率高于YOLO"></p>
 <h2 id="组合Fast-R-CNN-和-YOLO"><a href="#组合Fast-R-CNN-和-YOLO" class="headerlink" title="组合Fast R-CNN 和 YOLO"></a>组合Fast R-CNN 和 YOLO</h2><p><img src="/img/4.28/36.png" srcset="/img/loading.gif" lazyload alt="模型组合在VOC 2007上的实验结果对比"></p>
 <h2 id="在Pascal-VOC-2012上测试结果"><a href="#在Pascal-VOC-2012上测试结果" class="headerlink" title="在Pascal VOC 2012上测试结果"></a>在Pascal VOC 2012上测试结果</h2><p><img src="/img/4.28/37.png" srcset="/img/loading.gif" lazyload alt="mAP排序"></p>
@@ -663,6 +662,45 @@
 
 
 
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-svg.js" ></script>
+
+  
 
 
 
