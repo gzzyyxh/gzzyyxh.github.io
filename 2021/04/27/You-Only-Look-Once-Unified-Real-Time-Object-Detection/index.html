@@ -270,7 +270,7 @@
 
 
 
-<h1 id="what’s-YOLO"><a href="#what’s-YOLO" class="headerlink" title="what’s YOLO"></a>what’s YOLO</h1><p>根据<a target="_blank" rel="noopener" href="https://pjreddie.com/darknet/yolo/">YOLO官网</a>对它的解释，YOLO：Real-Time Object Detection. You Only Look Once（YOLO）是一个最先进的实时的目标检测系统。在Pascal Titan X上面处理图像能够达到30FPS，在COCO test-dev上具有57.9%的mAP。</p>
+<h1 id="what’s-YOLO"><a href="#what’s-YOLO" class="headerlink" title="what’s YOLO"></a>what’s YOLO</h1><p>根据<a target="_blank" rel="noopener" href="https://pjreddie.com/darknet/yolo/">YOLO官网</a>对它的解释，YOLO：Real-Time Object Detection. You Only Look Once（YOLO）是一个最先进的实时的目标检测系统。在Pascal Titan X上面处理图像能够达到30FPS，在COCO test-dev上具有57.9%的<a target="_blank" rel="noopener" href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/">mAP</a>。</p>
 <h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><p><img src="/img/4.28/1.png" srcset="/img/loading.gif" lazyload alt="目标检测"></p>
 <p>2015年之前目标检测方法在Pascal VOC 2007数据集上测试的FPS和mAP结果对比,传统的目标检测方法大致分为三个步骤，先使用不同的方法（滑动窗口，区域候选）提取区域的特征图，然后再使用分类器进行识别，最后回归预测。大多数方法都较为复杂，速度较慢，训练耗时。</p>
 <p>传统的方法可以按照检测系统分为两种：</p>
@@ -297,7 +297,7 @@
 <li>通过模型的置信度对结果进行阈值。</li>
 </ol>
 <h3 id="YOLO实现细节"><a href="#YOLO实现细节" class="headerlink" title="YOLO实现细节"></a>YOLO实现细节</h3><ol>
-<li>将一幅图像分成 S×S 个网格(Grid Cell)，如果某个object的中心落在某个网格中（通过ground-truth框确定），则这个网格就负责预测这个object。</li>
+<li>将一幅图像分成&amp;&amp;S×S&amp;&amp;个网格(Grid Cell)，如果某个object的中心落在某个网格中（通过ground-truth框确定），则这个网格就负责预测这个object。</li>
 <li>每个网格要预测B个bounding box，每个box除了要回归自身的位置之外，还要附带预测一个confidence值。这个值代表了所预测的bounding box中是否含有object和若有object，这个object预测得有多准的两重信息，计算方式：</li>
 </ol>
 <script type="math/tex; mode=display">
