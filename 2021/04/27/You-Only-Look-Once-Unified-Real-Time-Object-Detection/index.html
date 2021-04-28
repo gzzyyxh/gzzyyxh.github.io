@@ -270,18 +270,18 @@
 
 
 
-<h1 id="what’s-YOLO"><a href="#what’s-YOLO" class="headerlink" title="what’s YOLO"></a>what’s YOLO</h1><p>根据<a target="_blank" rel="noopener" href="https://pjreddie.com/darknet/yolo/">YOLO官网</a>对它的解释，YOLO：Real-Time Object Detection. You Only Look Once（YOLO）是一个最先进的实时的目标检测系统。在Pascal Titan X上面处理图像能够达到30FPS，在COCO test-dev上具有57.9%的<a target="_blank" rel="noopener" href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/">mAP</a>。</p>
+<h1 id="what’s-YOLO"><a href="#what’s-YOLO" class="headerlink" title="what’s YOLO"></a>what’s YOLO</h1><p>根据<a target="_blank" rel="noopener" href="https://pjreddie.com/darknet/yolo/">YOLO官网</a>对它的解释，YOLO：Real-Time Object Detection. You Only Look Once(YOLO)是一个最先进的实时的目标检测系统。在Pascal Titan X上面处理图像能够达到30FPS，在COCO test-dev上具有57.9%的<a target="_blank" rel="noopener" href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/">mAP</a>。</p>
 <h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><p><img src="/img/4.28/1.png" srcset="/img/loading.gif" lazyload alt="目标检测"></p>
-<p>2015年之前目标检测方法在Pascal VOC 2007数据集上测试的FPS和mAP结果对比,传统的目标检测方法大致分为三个步骤，先使用不同的方法（滑动窗口，区域候选）提取区域的特征图，然后再使用分类器进行识别，最后回归预测。大多数方法都较为复杂，速度较慢，训练耗时。</p>
+<p>2015年之前目标检测方法在Pascal VOC 2007数据集上测试的FPS和mAP结果对比,传统的目标检测方法大致分为三个步骤，先使用不同的方法(滑动窗口，区域候选)提取区域的特征图，然后再使用分类器进行识别，最后回归预测。大多数方法都较为复杂，速度较慢，训练耗时。</p>
 <p>传统的方法可以按照检测系统分为两种：</p>
 <ol>
 <li>DPM，Deformatable Parts Models，采用sliding window检测</li>
-<li>R-CNN、Fast R-CNN。采用region proposal的方法，生成一些可能包含待检测物体的potential bounding box，再通过一个classifier（SVM）判断每个bbox里是否真的包含物体，以及物体的class probability。</li>
+<li>R-CNN、Fast R-CNN。采用region proposal的方法，生成一些可能包含待检测物体的potential bounding box，再通过一个classifier(SVM)判断每个bbox里是否真的包含物体，以及物体的class probability。</li>
 </ol>
 <p>目前深度学习相关的目标检测方法大致可以分为两派：</p>
 <ol>
-<li>基于区域提名的（regin proposal）的，比如R-CNN、SPP-Net、Fast R-CNN、Faster R-CNN、R-FCN。</li>
-<li>基于端到端（end to end）的，无需候选区域，如YOLO、SSD。<br>二者发展都很迅速，区域提名准确率较好、端到端的方法速度较快。</li>
+<li>基于区域提名的(regin proposal)的，比如R-CNN、SPP-Net、Fast R-CNN、Faster R-CNN、R-FCN。</li>
+<li>基于端到端(end to end)的，无需候选区域，如YOLO、SSD。<br>二者发展都很迅速，区域提名准确率较好、端到端的方法速度较快。</li>
 </ol>
 <h2 id="YOLO-核心思想"><a href="#YOLO-核心思想" class="headerlink" title="YOLO 核心思想"></a>YOLO 核心思想</h2><ul>
 <li>将整张图片作为网络的输入，直接在输出层对bounding box的位置和所属类别进行回归。与Faster R-CNN网络相比，虽然后者也是使用整张图片作为输入，但是它采用了RCNN那种区域预测+分类的思想，把提取proposal的步骤放在了CNN中实现，而YOLO则采用直接回归的思路，将目标定位和目标类别预测整合于在单个神经网络模型中。</li>
@@ -297,7 +297,7 @@
 <li>通过模型的置信度对结果进行阈值。</li>
 </ol>
 <h3 id="YOLO实现细节"><a href="#YOLO实现细节" class="headerlink" title="YOLO实现细节"></a>YOLO实现细节</h3><ol>
-<li>将一幅图像分成<script type="math/tex">S \times S</script>个网格(Grid Cell)，如果某个object的中心落在某个网格中（通过ground-truth框确定），则这个网格就负责预测这个object。</li>
+<li>将一幅图像分成<script type="math/tex">S \times S</script>个网格(Grid Cell)，如果某个object的中心落在某个网格中(通过ground-truth框确定)，则这个网格就负责预测这个object。</li>
 <li>每个网格要预测B个bounding box，每个box除了要回归自身的位置之外，还要附带预测一个confidence值。这个值代表了所预测的bounding box中是否含有object和若有object，这个object预测得有多准的两重信息，计算方式：</li>
 </ol>
 <script type="math/tex; mode=display">
@@ -307,12 +307,12 @@
 </ol>
 <script type="math/tex; mode=display">
 \operatorname{Pr}\left(\text { Class }_{i} \mid \text { Object }\right) * \operatorname{Pr}(\text { Object }) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}=\operatorname{Pr}\left(\text { Class }_{i}\right) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}</script><ol>
-<li>在Pascal VOC中，YOLO检测系统的图像输入为448×448，S=7，B=2，一共有20个class（C=20），输出就是7×7×30的一个tensor。这个是怎么算出来的呢？看下面详解。</li>
+<li>在Pascal VOC中，YOLO检测系统的图像输入为448×448，S=7，B=2，一共有20个class(C=20)，输出就是7×7×30的一个tensor。这个是怎么算出来的呢？看下面详解。</li>
 </ol>
 <h2 id="YOLO-网络设计"><a href="#YOLO-网络设计" class="headerlink" title="YOLO 网络设计"></a>YOLO 网络设计</h2><p><img src="/img/4.28/3.png" srcset="/img/loading.gif" lazyload alt="YOLO网络结构"></p>
-<p>YOLO使用了24个级联卷积层和最后2个全连接层，交替的1×1卷积层降低了前面层的特征空间。在ImageNet分类任务上使用分辨率的一半（224×224输入图像）对卷积层进行预训练，然后将分辨率加倍进行目标检测。</p>
+<p>YOLO使用了24个级联卷积层和最后2个全连接层，交替的1×1卷积层降低了前面层的特征空间。在ImageNet分类任务上使用分辨率的一半(224×224输入图像)对卷积层进行预训练，然后将分辨率加倍进行目标检测。</p>
 <p><img src="/img/4.28/4.png" srcset="/img/loading.gif" lazyload alt="YOLO网络概览图"></p>
-<p>YOLO网络借鉴了GoogleNet的思想，但与之不同的是，为了更好的性能，它增加额外的4层卷积层（conv）。YOLO一共使用了24个级联的卷积层和2个全连接层（fc），其中conv层中包含了1×1和3×3两种kernel，最后一个fc全连接层后经过reshape之后就是YOLO网络的输出，是长度为<script type="math/tex">S \times S \times (B \times 5 + C ) = 7 \times 7 \times 30</script>的tensor，最后经过识别过程得到最终的检测结果。</p>
+<p>YOLO网络借鉴了GoogleNet的思想，但与之不同的是，为了更好的性能，它增加额外的4层卷积层(conv)。YOLO一共使用了24个级联的卷积层和2个全连接层(fc)，其中conv层中包含了1×1和3×3两种kernel，最后一个fc全连接层后经过reshape之后就是YOLO网络的输出，是长度为<script type="math/tex">S \times S \times (B \times 5 + C ) = 7 \times 7 \times 30</script>的tensor，最后经过识别过程得到最终的检测结果。</p>
 <p><img src="/img/4.28/5.png" srcset="/img/loading.gif" lazyload alt="1x1x30 tensor解释"></p>
 <p>上文说到每个bounding box要预测(x,y,w,h,confidence)五个值，一张图片共分为<script type="math/tex">S \times S</script>个网格，每个网格要预测出B个bounding box和一个网格负责的object的类别信息，记为<script type="math/tex">C</script>。</p>
 <p>则输出为<script type="math/tex">S \times S \times ( 5 \times B + C )</script>的tensor张量，<script type="math/tex">(x,y)</script>表示bounding box相对于网格单元的边界的offset，归一化到<script type="math/tex">(0,1)</script>范围之内，而<script type="math/tex">w</script>,<script type="math/tex">h</script>表示相对于整个图片的预测宽和高，也被归一化到<script type="math/tex">(0,1)</script>范围内，<script type="math/tex">c</script>代表的是object在某个bounding box的confidence。</p>
@@ -320,12 +320,12 @@
 <h3 id="归一化"><a href="#归一化" class="headerlink" title="归一化"></a>归一化</h3><p>下面解释如何将预测坐标的x,y用相对于对应网格的offset归一化到0-1和w,h是如何利用图像的宽高归一化到0-1之间。</p>
 <p>每个单元格预测的B个<script type="math/tex">(x,y,w,h,confidence)</script>向量，假设图片为<script type="math/tex">S \times S</script>个网格，S=7，图片宽为<script type="math/tex">w_{i}</script>高为<script type="math/tex">h_{i}</script>：</p>
 <ol>
-<li><script type="math/tex">（x,y）</script>是bbox的中心相对于单元格的offset对于下图中蓝色单元格，坐标为<script type="math/tex">\left(x_{col}=1, y_{row} \text =4\right)</script>，假设它的预测输出是红色框bbox，设bbox的中心坐标为那么最终预测出来的<script type="math/tex">（x,y）</script>是经过归一化处理的，表示的是相对于单元格的offset，公式：</li>
+<li><script type="math/tex">(x,y)</script>是bbox的中心相对于单元格的offset对于下图中蓝色单元格，坐标为<script type="math/tex">\left(x_{col}=1, y_{row} \text =4\right)</script>，假设它的预测输出是红色框bbox，设bbox的中心坐标为那么最终预测出来的<script type="math/tex">(x,y)</script>是经过归一化处理的，表示的是相对于单元格的offset，公式：</li>
 </ol>
 <script type="math/tex; mode=display">
 x=\frac{x_{c}}{w_{i}} * S-x_{\text {col }}, \quad y=\frac{y_{c}}{h_{i}} * S-y_{\text {row }}</script><p><img src="/img/4.28/6.png" srcset="/img/loading.gif" lazyload alt="归一化"></p>
 <ol>
-<li><script type="math/tex">（w,h）</script>是bbox相对于整个图片的比例预测的bbox的宽高为<script type="math/tex">w_{b}</script>, <script type="math/tex">h_{b}</script>，<script type="math/tex">（w,h）</script>表示的是bbox相对于整张图片的占比，公式：</li>
+<li><script type="math/tex">(w,h)</script>是bbox相对于整个图片的比例预测的bbox的宽高为<script type="math/tex">w_{b}</script>, <script type="math/tex">h_{b}</script>，<script type="math/tex">(w,h)</script>表示的是bbox相对于整张图片的占比，公式：</li>
 </ol>
 <script type="math/tex; mode=display">
 w=\frac{w_{b}}{w_{i}}, h=\frac{h_{b}}{h_{i}}</script><h3 id="Inference"><a href="#Inference" class="headerlink" title="Inference"></a>Inference</h3><p><img src="/img/4.28/7.png" srcset="/img/loading.gif" lazyload alt="1x1x30 前10维解释"></p>
@@ -337,7 +337,7 @@ w=\frac{w_{b}}{w_{i}}, h=\frac{h_{b}}{h_{i}}</script><h3 id="Inference"><a href=
 <p><img src="/img/4.28/11.png" srcset="/img/loading.gif" lazyload alt="类别预测分数的计算"></p>
 <p>每个单元格预测一个属于类别<script type="math/tex">class_{i}</script>的条件概率$\operatorname{Pr}\left(\right.$ Class $_{i} \mid$ Object $)$。要注意的是，属于一个网格的2个bboxs共享一套条件概率值，因为这两个box都是为了一个grid cell服务，最终预测出一个object类别。在测试时，将条件概率和单个bbox的confidence预测相乘：</p>
 <script type="math/tex; mode=display">
-\operatorname{Pr}\left(\text { Class }_{i} \mid \text { Object }\right) * \operatorname{Pr}(\text { Object }) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}=\operatorname{Pr}\left(\text { Class }_{i}\right) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}</script><p>如上式所述，每个网格预测的类别概率乘以每个bbox的预测confidence，得到每个bbox的class-specific confidence score分数。对每个格子的每一个bounding box进行此运算，最后会得到7×7×2=98个scores，设置一个阈值，滤掉得分低的bboxes，对保留的bboxes进行NMS（Non Maximum Suppression）处理，最终得到目标检测结果。</p>
+\operatorname{Pr}\left(\text { Class }_{i} \mid \text { Object }\right) * \operatorname{Pr}(\text { Object }) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}=\operatorname{Pr}\left(\text { Class }_{i}\right) * \operatorname{Io} U \frac{\text { truth }}{\text { pred }}</script><p>如上式所述，每个网格预测的类别概率乘以每个bbox的预测confidence，得到每个bbox的class-specific confidence score分数。对每个格子的每一个bounding box进行此运算，最后会得到7×7×2=98个scores，设置一个阈值，滤掉得分低的bboxes，对保留的bboxes进行NMS(Non Maximum Suppression)处理，最终得到目标检测结果。</p>
 <p><img src="/img/4.28/12.png" srcset="/img/loading.gif" lazyload alt="图像中第一个网格中两个bboxes经过计算后的结果"></p>
 <p><img src="/img/4.28/13.png" srcset="/img/loading.gif" lazyload alt="依次计算最终得到98个附带有score的tensors"></p>
 <p><img src="/img/4.28/14.png" srcset="/img/loading.gif" lazyload alt="依次计算最终得到98个附带有score的tensors"></p>
@@ -356,7 +356,7 @@ w=\frac{w_{b}}{w_{i}}, h=\frac{h_{b}}{h_{i}}</script><h3 id="Inference"><a href=
 <p><img src="/img/4.28/28.png" srcset="/img/loading.gif" lazyload alt="对98个框的针对其他类别预测的score依次进行NMS处理"></p>
 <h2 id="再筛选bounding-box"><a href="#再筛选bounding-box" class="headerlink" title="再筛选bounding box"></a>再筛选bounding box</h2><p>经过这些NMS算法的处理，会出现很多框针对某个class的预测的score为0的情况。<br>最后，针对每个bbox的20×1的张量，对20种class的预测score进行判断。例如，</p>
 <ol>
-<li>先取出针对bbox3的所有20个scores，按照类别的默认顺序找出score最大的那个score的index索引号（根据此index可以找出所属的类别）记为class；</li>
+<li>先取出针对bbox3的所有20个scores，按照类别的默认顺序找出score最大的那个score的index索引号(根据此index可以找出所属的类别)记为class；</li>
 <li>然后找出bbox3的最大score分数，记为score。</li>
 <li>判断score是否大于0，如果是，就在图像中画出标有class的框。否则，丢弃此bbox。<br>如图：</li>
 </ol>
@@ -372,7 +372,7 @@ w=\frac{w_{b}}{w_{i}}, h=\frac{h_{b}}{h_{i}}</script><h3 id="Inference"><a href=
 <li>8维的localization error和20维的classification error同样重要显然是不合理的，应该更重视8维的坐标预测，所以作者给这个损失前加了个权重，记为：<script type="math/tex">\lambda_{\text {coord }}</script>,在Pascal VOC训练中取5。</li>
 <li>对于不存在object的bbox的confidence loss，赋予了更小的损失权重，记为<script type="math/tex">\lambda_{\text {noobj }}</script>，在Pascal VOC中取0.5。若没有任何物体中心落入边界框中，则<script type="math/tex">\widehat{C}_{i}</script>为0，此时我们希望预测含有物体的置信度<script type="math/tex">C_{i}</script>越小越好。然而，大部分bbox中都没有object，积少成多，造成loss的第2部分与第3部分的不平衡，因此，在loss的三部分增加权重<script type="math/tex">\lambda_{\text {noobj}}=0.5</script>。</li>
 <li>对于存在object的bbox的confidence loss和类别的loss，权重取常数1。对于每个格子而言，作者设计只能包含同种物体。若格子中包含物体，我们希望希望预测正确的类别的概率越接近于1越好，而错误类别的概率越接近于0越好。loss第4部分中，若<script type="math/tex">\hat{p}_{i}(c)</script>为0中<script type="math/tex">c</script>为正确类别，则值为1，若非正确类别，则值为0。</li>
-<li>对于第二行中为什么对<script type="math/tex">w_{i}</script>和<script type="math/tex">h_{i}</script>取平方根处理，原因是：对于一个图像中存在的不同大小的object，小物体的预测框偏离一点和大的相比肯定更严重，而sum-square error loss中对大小object的偏移loss是一同处理的。为了缓和，作者使用开方的方法，将bbox的width和height去平方根代替width和height。我们可以这样理解，假如预测出的小物体<script type="math/tex">(width=10, height=10)</script>的宽比实际大了10pixel，大物体<script type="math/tex">（width=100,height=100）</script>的宽度比实际预测大了10pixel。显然对于小物体，预测大了一倍，我们接受不了，而对大物体来说就影响不大。所以我们就要加大惩罚措施，让小物体预测大了10pixel的后果对于损失函数的值贡献更大，我们通过取平方根<script type="math/tex">\sqrt{20}-\sqrt{10} \approx 3.4>\sqrt{110}-\sqrt{100}\approx 0.5</script>，这样也算达到了目的吧。</li>
+<li>对于第二行中为什么对<script type="math/tex">w_{i}</script>和<script type="math/tex">h_{i}</script>取平方根处理，原因是：对于一个图像中存在的不同大小的object，小物体的预测框偏离一点和大的相比肯定更严重，而sum-square error loss中对大小object的偏移loss是一同处理的。为了缓和，作者使用开方的方法，将bbox的width和height去平方根代替width和height。我们可以这样理解，假如预测出的小物体<script type="math/tex">(width=10, height=10)</script>的宽比实际大了10pixel，大物体<script type="math/tex">(width=100,height=100)</script>的宽度比实际预测大了10pixel。显然对于小物体，预测大了一倍，我们接受不了，而对大物体来说就影响不大。所以我们就要加大惩罚措施，让小物体预测大了10pixel的后果对于损失函数的值贡献更大，我们通过取平方根<script type="math/tex">\sqrt{20}-\sqrt{10} \approx 3.4>\sqrt{110}-\sqrt{100}\approx 0.5</script>，这样也算达到了目的吧。</li>
 </ol>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><h2 id="与其他检测方法对比"><a href="#与其他检测方法对比" class="headerlink" title="与其他检测方法对比"></a>与其他检测方法对比</h2><p>详见论文。</p>
 <h3 id="在Pascal-VOC-2007上的测试结果"><a href="#在Pascal-VOC-2007上的测试结果" class="headerlink" title="在Pascal VOC 2007上的测试结果"></a>在Pascal VOC 2007上的测试结果</h3><p><img src="/img/4.28/34.png" srcset="/img/loading.gif" lazyload alt="在Pascal VOC 2007 上与其他检测方法的对比"></p>
@@ -383,10 +383,10 @@ w=\frac{w_{b}}{w_{i}}, h=\frac{h_{b}}{h_{i}}</script><h3 id="Inference"><a href=
 <p><img src="/img/4.28/35.png" srcset="/img/loading.gif" lazyload alt="YOLO定位错误率高于Fast R-CNN；Fast R-CNN背景预测错误率高于YOLO"></p>
 <h2 id="组合Fast-R-CNN-和-YOLO"><a href="#组合Fast-R-CNN-和-YOLO" class="headerlink" title="组合Fast R-CNN 和 YOLO"></a>组合Fast R-CNN 和 YOLO</h2><p><img src="/img/4.28/36.png" srcset="/img/loading.gif" lazyload alt="模型组合在VOC 2007上的实验结果对比"></p>
 <h2 id="在Pascal-VOC-2012上测试结果"><a href="#在Pascal-VOC-2012上测试结果" class="headerlink" title="在Pascal VOC 2012上测试结果"></a>在Pascal VOC 2012上测试结果</h2><p><img src="/img/4.28/37.png" srcset="/img/loading.gif" lazyload alt="mAP排序"></p>
-<h2 id="通用性"><a href="#通用性" class="headerlink" title="通用性"></a>通用性</h2><p><img src="/img/4.28/38.png" srcset="/img/loading.gif" lazyload alt="通用性（Picasso 数据集和 People-Art数据集）YOLO都具有很好的检测结果"></p>
+<h2 id="通用性"><a href="#通用性" class="headerlink" title="通用性"></a>通用性</h2><p><img src="/img/4.28/38.png" srcset="/img/loading.gif" lazyload alt="通用性(Picasso 数据集和 People-Art数据集)YOLO都具有很好的检测结果"></p>
 <h1 id="merits-and-drawbacks"><a href="#merits-and-drawbacks" class="headerlink" title="merits and drawbacks"></a>merits and drawbacks</h1><h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ol>
-<li>假阳性（FP）错误率低。YOLO网络将整个图像的全部信息作为上下文，在训练的过程中使用到了全图信息，能够更好的区分目标个背景区域。</li>
-<li>端到端（end-to-end）的方法，速度快，如官网所说，具有实时性，45fps，在YOLO-tiny上可以达到155fps。</li>
+<li>假阳性(FP)错误率低。YOLO网络将整个图像的全部信息作为上下文，在训练的过程中使用到了全图信息，能够更好的区分目标个背景区域。</li>
+<li>端到端(end-to-end)的方法，速度快，如官网所说，具有实时性，45fps，在YOLO-tiny上可以达到155fps。</li>
 <li>通用性强，可以学到物体的generalizable-representation。对于艺术类作品中的物体检测同样适用。它对非自然图像物体的检测率远远高于DPM和RCNN系列检测方法。</li>
 </ol>
 <h2 id="不足之处"><a href="#不足之处" class="headerlink" title="不足之处"></a>不足之处</h2><ol>
