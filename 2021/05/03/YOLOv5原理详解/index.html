@@ -219,7 +219,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      63
+      64
        分钟
     </span>
   
@@ -299,15 +299,11 @@
 <p>Yolov5作者也是在COCO数据集上进行的测试，大白在之前的文章讲过，COCO数据集的小目标占比，因此最终的四种网络结构，性能上来说各有千秋。</p>
 <p>Yolov5s网络最小，速度最少，AP精度也最低。但如果检测的以大目标为主，追求速度，倒也是个不错的选择。</p>
 <p>其他的三种网络，在此基础上，不断加深加宽网络，AP精度也不断提升，但速度的消耗也在不断增加。</p>
-<h3 id="输入端"><a href="#输入端" class="headerlink" title="输入端"></a>输入端</h3><ol>
-<li>Mosaic数据增强</li>
-</ol>
+<h3 id="输入端"><a href="#输入端" class="headerlink" title="输入端"></a>输入端</h3><p>1.Mosaic数据增强</p>
 <p>Yolov5的输入端采用了和Yolov4一样的Mosaic数据增强的方式。</p>
 <p>Mosaic数据增强提出的作者也是来自Yolov5团队的成员，不过，随机缩放、随机裁剪、随机排布的方式进行拼接，对于小目标的检测效果还是很不错的。</p>
 <p><img src="/img/5.3/38.jpg" srcset="/img/loading.gif" lazyload alt="Mosaic数据增强"></p>
-<ol>
-<li>自适应锚框计算</li>
-</ol>
+<p>2.自适应锚框计算</p>
 <p>在Yolo算法中，针对不同的数据集，都会有初始设定长宽的锚框。</p>
 <p>在网络训练中，网络在初始锚框的基础上输出预测框，进而和真实框groundtruth进行比对，计算两者差距，再反向更新，迭代网络参数。</p>
 <p>因此初始锚框也是比较重要的一部分，比如Yolov5在Coco数据集上初始设定的锚框：</p>
@@ -317,9 +313,7 @@
 <p>当然，如果觉得计算的锚框效果不是很好，也可以在代码中将自动计算锚框功能关闭。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">parser.add arqument(<span class="hljs-string">&#x27;--noautoanchor&#x27;</span>,action=<span class="hljs-string">&#x27;store true&#x27;</span>,<span class="hljs-built_in">help</span>=<span class="hljs-string">&#x27;disable autoanchor check&#x27;</span>)<br></code></pre></td></tr></table></figure>
 <p>控制的代码即train.py中上面一行代码，设置成False，每次训练时，不会自动计算。</p>
-<ol>
-<li>自适应图片缩放</li>
-</ol>
+<p>3.自适应图片缩放</p>
 <p>在常用的目标检测算法中，不同的图片长宽都不相同，因此常用的方式是将原始图片统一缩放到一个标准尺寸，再送入检测网络中。</p>
 <p>比如Yolo算法中常用416<em>416，608</em>608等尺寸，比如对下面800*600的图像进行缩放。</p>
 <p><img src="/img/5.3/39.jpg" srcset="/img/loading.gif" lazyload alt="自适应图片缩放"></p>
@@ -343,17 +337,13 @@
 <p>此外，需要注意的是：</p>
 <p>a.这里大白填充的是黑色，即（0，0，0），而Yolov5中填充的是灰色，即（114,114,114），都是一样的效果。</p>
 <p>b.训练时没有采用缩减黑边的方式，还是采用传统填充的方式，即缩放到416*416大小。只是在测试，使用模型推理时，才采用缩减黑边的方式，提高目标检测，推理的速度。</p>
-<h3 id="Backbone"><a href="#Backbone" class="headerlink" title="Backbone"></a>Backbone</h3><ol>
-<li>Foucus结构</li>
-</ol>
+<h3 id="Backbone"><a href="#Backbone" class="headerlink" title="Backbone"></a>Backbone</h3><p>1.Foucus结构</p>
 <p><img src="/img/5.3/44.jpg" srcset="/img/loading.gif" lazyload alt="Foucus结构"></p>
 <p>Focus结构，在Yolov3&amp;Yolov4中并没有这个结构，其中比较关键是切片操作。</p>
 <p>比如右图的切片示意图，4<em>4</em>3的图像切片后变成2<em>2</em>12的特征图。</p>
 <p>以Yolov5s的结构为例，原始608<em>608</em>3的图像输入Focus结构，采用切片操作，先变成304<em>304</em>12的特征图，再经过一次32个卷积核的卷积操作，最终变成304<em>304</em>32的特征图。</p>
 <p>需要注意的是：Yolov5s的Focus结构最后使用了32个卷积核，而其他三种结构，使用的数量有所增加，先注意下，后面会讲解到四种结构的不同点。</p>
-<ol>
-<li>CSP结构</li>
-</ol>
+<p>2.CSP结构</p>
 <p>Yolov4网络结构中，借鉴了CSPNet的设计思路，在主干网络中设计了CSP结构。</p>
 <p><img src="/img/5.3/45.jpg" srcset="/img/loading.gif" lazyload alt="CSP结构"></p>
 <p>Yolov5与Yolov4不同点在于，Yolov4中只有主干网络使用了CSP结构。</p>
@@ -367,18 +357,14 @@
 <p>但如上面CSPNet结构中讲到，Yolov5和Yolov4的不同点在于，</p>
 <p>Yolov4的Neck结构中，采用的都是普通的卷积操作。而Yolov5的Neck结构中，采用借鉴CSPnet设计的CSP2结构，加强网络特征融合的能力。</p>
 <p><img src="/img/5.3/48.jpg" srcset="/img/loading.gif" lazyload alt="Neck"></p>
-<h3 id="输出端"><a href="#输出端" class="headerlink" title="输出端"></a>输出端</h3><ol>
-<li>Bounding box损失函数</li>
-</ol>
+<h3 id="输出端"><a href="#输出端" class="headerlink" title="输出端"></a>输出端</h3><p>1.Bounding box损失函数</p>
 <p>在<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/143747206">《深入浅出Yolo系列之Yolov3&amp;Yolov4核心基础知识完整讲解》</a>中，大白详细的讲解了IOU_Loss，以及进化版的GIOU_Loss，DIOU_Loss，以及CIOU_Loss。</p>
 <p>Yolov5中采用其中的GIOU_Loss做Bounding box的损失函数。</p>
 <p><img src="/img/5.3/49.jpg" srcset="/img/loading.gif" lazyload alt="Bounding box损失函数"></p>
 <p>而Yolov4中采用CIOU_Loss作为目标Bounding box的损失。</p>
 <script type="math/tex; mode=display">
 CIOU_Loss = 1-CIOU=1-(IOU-\frac{Distance_{2^2}}{Distance_{C^2}}-\frac{v^2}{(1-IOU)+v})</script><script type="math/tex; mode=display">
-v=\frac{4}{\pai^2}(arctan \frac{w^{gt}}{h^{gt}}-arctan \frac{w^p}{h^p})^2</script><ol>
-<li>nms非极大值抑制</li>
-</ol>
+v=\frac{4}{\pi^2}(arctan \frac{w^{gt}}{h^{gt}}-arctan \frac{w^p}{h^p})^2</script><p>2.nms非极大值抑制</p>
 <p>在目标检测的后处理过程中，针对很多目标框的筛选，通常需要nms操作。</p>
 <p>因为CIOU_Loss中包含影响因子v，涉及groudtruth的信息，而测试推理时，是没有groundtruth的。</p>
 <p>所以Yolov4在DIOU_Loss的基础上采用DIOU_nms的方式，而Yolov5中采用加权nms的方式。</p>
@@ -390,21 +376,13 @@ v=\frac{4}{\pai^2}(arctan \frac{w^{gt}}{h^{gt}}-arctan \frac{w^p}{h^p})^2</scrip
 <p><img src="/img/5.3/51.jpg" srcset="/img/loading.gif" lazyload alt="nms非极大值抑制"></p>
 <h2 id="Yolov5四种网络结构的不同点"><a href="#Yolov5四种网络结构的不同点" class="headerlink" title="Yolov5四种网络结构的不同点"></a>Yolov5四种网络结构的不同点</h2><p>Yolov5代码中的四种网络，和之前的Yolov3，Yolov4中的cfg文件不同，都是以yaml的形式来呈现。</p>
 <p>而且四个文件的内容基本上都是一样的，只有最上方的depth_multiple和width_multiple两个参数不同，很多同学看的一脸懵逼，不知道只通过两个参数是如何控制四种结构的？</p>
-<h3 id="四种结构的参数"><a href="#四种结构的参数" class="headerlink" title="四种结构的参数"></a>四种结构的参数</h3><ol>
-<li>Yolov5s.yaml</li>
-</ol>
+<h3 id="四种结构的参数"><a href="#四种结构的参数" class="headerlink" title="四种结构的参数"></a>四种结构的参数</h3><p>1.Yolov5s.yaml</p>
 <p><img src="/img/5.3/52.png" srcset="/img/loading.gif" lazyload alt="Yolov5s.yaml"></p>
-<ol>
-<li>Yolov5m.yaml</li>
-</ol>
+<p>2.Yolov5m.yaml</p>
 <p><img src="/img/5.3/53.png" srcset="/img/loading.gif" lazyload alt="Yolov5m.yaml"></p>
-<ol>
-<li>Yolov5l.yaml</li>
-</ol>
+<p>3.Yolov5l.yaml</p>
 <p><img src="/img/5.3/54.png" srcset="/img/loading.gif" lazyload alt="Yolov5l.yaml"></p>
-<ol>
-<li>Yolov5x.yaml</li>
-</ol>
+<p>4.Yolov5x.yaml</p>
 <p><img src="/img/5.3/55.png" srcset="/img/loading.gif" lazyload alt="Yolov5x.yaml"></p>
 <p>四种结构就是通过上面的两个参数，来进行控制网络的深度和宽度。其中depth_multiple控制网络的深度，width_multiple控制网络的宽度。</p>
 <h3 id="Yolov5网络结构"><a href="#Yolov5网络结构" class="headerlink" title="Yolov5网络结构"></a>Yolov5网络结构</h3><p>四种结构的yaml文件中，下方的网络架构代码都是一样的。</p>
@@ -414,9 +392,7 @@ v=\frac{4}{\pai^2}(arctan \frac{w^{gt}}{h^{gt}}-arctan \frac{w^p}{h^p})^2</scrip
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">anchors,nc,gd,gw=d[<span class="hljs-string">&#x27;anchors&#x27;</span>],d[<span class="hljs-string">&#x27;nc&#x27;</span>],d[<span class="hljs-string">&#x27;depth_multiple&#x27;</span>],d[<span class="hljs-string">&#x27;width_multiple&#x27;</span>]<br></code></pre></td></tr></table></figure>
 <p>下面再细致的剖析下，看是如何控制每种结构，深度和宽度的。</p>
 <h3 id="Yolov5四种网络的深度"><a href="#Yolov5四种网络的深度" class="headerlink" title="Yolov5四种网络的深度"></a>Yolov5四种网络的深度</h3><p><img src="/img/5.3/57.jpg" srcset="/img/loading.gif" lazyload alt="Yolov5四种网络的深度"></p>
-<ol>
-<li>不同网络的深度</li>
-</ol>
+<p>1.不同网络的深度</p>
 <p>在上图中，大白画了两种CSP结构，CSP1和CSP2，其中CSP1结构主要应用于Backbone中，CSP2结构主要应用于Neck中。</p>
 <p>需要注意的是，四种网络结构中每个CSP结构的深度都是不同的。</p>
 <p>a.以yolov5s为例，第一个CSP1中，使用了1个残差组件，因此是CSP1_1。而在Yolov5m中，则增加了网络的深度，在第一个CSP1中，使用了2个残差组件，因此是CSP1_2。</p>
@@ -426,15 +402,11 @@ v=\frac{4}{\pai^2}(arctan \frac{w^{gt}}{h^{gt}}-arctan \frac{w^p}{h^p})^2</scrip
 <p>而Yolov5m中使用了2组，Yolov5l中使用了3组，Yolov5x中使用了4组。</p>
 <p>其他的四个CSP2结构，也是同理。</p>
 <p>Yolov5中，网络的不断加深，也在不断增加网络特征提取和特征融合的能力。</p>
-<ol>
-<li>控制深度的代码</li>
-</ol>
+<p>2.控制深度的代码</p>
 <p>控制四种网络结构的核心代码是yolo.py中下面的代码，存在两个变量，n和gd。</p>
 <p>我们再将n和gd带入计算，看每种网络的变化结果。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">n=<span class="hljs-built_in">max</span>(<span class="hljs-built_in">round</span>(n*gd),<span class="hljs-number">1</span>) <span class="hljs-keyword">if</span> n &gt; <span class="hljs-number">1</span> <span class="hljs-keyword">else</span> n <span class="hljs-comment"># depth gain</span><br></code></pre></td></tr></table></figure>
-<ol>
-<li>验证控制深度的有效性</li>
-</ol>
+<p>3.验证控制深度的有效性</p>
 <p>择最小的yolov5s.yaml和中间的yolov5l.yaml两个网络结构，将gd(height_multiple)系数带入，看是否正确。</p>
 <p><img src="/img/5.3/57.jpg" srcset="/img/loading.gif" lazyload alt="验证控制深度的有效性"></p>
 <ul>
@@ -452,9 +424,7 @@ v=\frac{4}{\pai^2}(arctan \frac{w^{gt}}{h^{gt}}-arctan \frac{w^p}{h^p})^2</scrip
 <p>和上面的计算方式相同，第一个CSP1结构中，n=1，带入代码中，结果n=3，因此为CSP1_3。</p>
 <p>下面第二个CSP1和第三个CSP1结构都是同样的原理。</p>
 <h3 id="Yolov5四种网络的宽度"><a href="#Yolov5四种网络的宽度" class="headerlink" title="Yolov5四种网络的宽度"></a>Yolov5四种网络的宽度</h3><p><img src="/img/5.3/59.jpg" srcset="/img/loading.gif" lazyload alt="Yolov5四种网络的宽度"></p>
-<ol>
-<li>不同网络的宽度:</li>
-</ol>
+<p>1.不同网络的宽度:</p>
 <p>如上图表格中所示，四种yolov5结构在不同阶段的卷积核的数量都是不一样的，因此也直接影响卷积后特征图的第三维度，即厚度，大白这里表示为网络的宽度。</p>
 <ul>
 <li>以Yolov5s结构为例，第一个Focus结构中，最后卷积操作时，卷积核的数量是32个，因此经过Focus结构，特征图的大小变成304<em>304</em>32。</li>
@@ -469,16 +439,12 @@ v=\frac{4}{\pai^2}(arctan \frac{w^{gt}}{h^{gt}}-arctan \frac{w^p}{h^p})^2</scrip
 <p>四种不同结构的卷积核的数量不同，这也直接影响网络中，比如CSP1，CSP2等结构，以及各个普通卷积，卷积操作时的卷积核数量也同步在调整，影响整体网络的计算量。</p>
 <p>大家最好可以将结构图和<a href="https://link.zhihu.com/?target=https%3A//blog.csdn.net/nan355655600/article/details/107658499">前面第一部分四个网络的特征图链接</a>，对应查看，思路会更加清晰。</p>
 <p>当然卷积核的数量越多，特征图的厚度，即宽度越宽，网络提取特征的学习能力也越强。</p>
-<ol>
-<li>控制宽度的代码</li>
-</ol>
+<p>2.控制宽度的代码</p>
 <p>在yolov5的代码中，控制宽度的核心代码是yolo.py文件里面的这一行：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">c2=make_divisible(c2*gw,<span class="hljs-number">8</span>) <span class="hljs-keyword">if</span> c2 != no <span class="hljs-keyword">else</span> c2<br></code></pre></td></tr></table></figure>
 <p>它所调用的子函数make_divisible的功能是：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">make_divisible</span>(<span class="hljs-params">x,divisor</span>):</span><br>    <span class="hljs-comment">#Returns x evenly divisble bu divisor</span><br>    <span class="hljs-keyword">return</span> math.cell(x / divisor) * divisor<br></code></pre></td></tr></table></figure>
-<ol>
-<li>验证控制宽度的有效性</li>
-</ol>
+<p>3.验证控制宽度的有效性</p>
 <p>我们还是选择最小的yolov5s和中间的yolov5l两个网络结构，将width_multiple系数带入，看是否正确。</p>
 <p><img src="/img/5.3/60.jpg" srcset="/img/loading.gif" lazyload alt="验证控制宽度的有效性"></p>
 <ul>
@@ -502,22 +468,16 @@ v=\frac{4}{\pai^2}(arctan \frac{w^{gt}}{h^{gt}}-arctan \frac{w^p}{h^p})^2</scrip
 <p><img src="/img/5.3/62.jpg" srcset="/img/loading.gif" lazyload alt="小目标分割检测"></p>
 <p>图像的分辨率很大，但又有很多小的目标需要检测。但是如果直接输入检测网络，比如yolov3，检出效果并不好。</p>
 <p>主要原因是：</p>
-<ol>
-<li>小目标尺寸</li>
-</ol>
+<p>1.小目标尺寸</p>
 <p>以网络的输入608<em>608为例，yolov3、yolov4，yolov5中下采样都使用了5次，因此最后的特征图大小是19</em>19，38<em>38，76</em>76。</p>
 <p>三个特征图中，最大的76<em>76负责检测小目标，而对应到608</em>608上，每格特征图的感受野是608/76=8*8大小。</p>
 <p><img src="/img/5.3/63.jpg" srcset="/img/loading.gif" lazyload alt="小目标分割检测"></p>
 <p>再将608<em>608对应到7680</em>2160上，以最长边7680为例，7680/608*8=101。</p>
 <p>即如果原始图像中目标的宽或高小于101像素，网络很难学习到目标的特征信息。</p>
 <p>（PS：这里忽略多尺度训练的因素及增加网络检测分支的情况）</p>
-<ol>
-<li>高分辨率</li>
-</ol>
+<p>2.高分辨率</p>
 <p>而在很多遥感图像中，长宽比的分辨率比7680<em>2160更大，比如上面的16000</em>16000，如果采用直接输入原图的方式，很多小目标都无法检测出。</p>
-<ol>
-<li>显卡爆炸</li>
-</ol>
+<p>3.显卡爆炸</p>
 <p>很多图像分辨率很大，如果简单的进行下采样，下采样的倍数太大，容易丢失数据信息。</p>
 <p>但是倍数太小，网络前向传播需要在内存中保存大量的特征图，极大耗尽GPU资源,很容易发生显存爆炸，无法正常的训练及推理。</p>
 <p>因此可以借鉴<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1805.09512">2018年YOLT算法</a>的方式，改变一下思维，对大分辨率图片先进行分割，变成一张张小图，再进行检测。</p>
@@ -535,14 +495,10 @@ v=\frac{4}{\pai^2}(arctan \frac{w^{gt}}{h^{gt}}-arctan \frac{w^p}{h^p})^2</scrip
 <p><img src="/img/5.3/67.jpg" srcset="/img/loading.gif" lazyload alt="小目标分割检测"></p>
 <p>不过这样的方式有优点也有缺点：</p>
 <p>优点：</p>
-<ol>
-<li>准确性</li>
-</ol>
+<p>1.准确性</p>
 <p>分割后的小图，再输入目标检测网络中，对于最小目标像素的下限会大大降低。</p>
 <p>比如分割成608<em>608大小，送入输入图像大小608</em>608的网络中，按照上面的计算方式，原始图片上，长宽大于8个像素的小目标都可以学习到特征。</p>
-<ol>
-<li>检测方式</li>
-</ol>
+<p>2.检测方式</p>
 <p>在大分辨率图像，比如遥感图像，或者无人机图像，如果无需考虑实时性的检测，且对小目标检测也有需求的项目，可以尝试此种方式。</p>
 <p>缺点：</p>
 <ol>
