@@ -280,10 +280,10 @@
 <p><img src="/img/5.3/29.jpg" srcset="/img/loading.gif" lazyload alt="Yolov5网络结构图"></p>
 <h2 id="网络结构可视化"><a href="#网络结构可视化" class="headerlink" title="网络结构可视化"></a>网络结构可视化</h2><p>将四种模型pt文件的转换成对应的onnx文件后，即可使用<a href="https://link.zhihu.com/?target=https%3A//blog.csdn.net/nan355655600/article/details/106245563">netron工具</a>查看。</p>
 <h3 id="Yolov5s网络结构"><a href="#Yolov5s网络结构" class="headerlink" title="Yolov5s网络结构"></a>Yolov5s网络结构</h3><p>Yolov5s网络是Yolov5系列中深度最小，特征图的宽度最小的网络。后面的3种都是在此基础上不断加深，不断加宽。</p>
-<p><img src="/img/5.3/30.jpg" srcset="/img/loading.gif" lazyload alt="Yolov5s网络结构"></p>
-<h3 id="Yolov5m网络结构"><a href="#Yolov5m网络结构" class="headerlink" title="Yolov5m网络结构"></a>Yolov5m网络结构</h3><p><img src="/img/5.3/31.jpg" srcset="/img/loading.gif" lazyload alt="Yolov5m网络结构"></p>
-<h3 id="Yolov5l网络结构"><a href="#Yolov5l网络结构" class="headerlink" title="Yolov5l网络结构"></a>Yolov5l网络结构</h3><p><img src="/img/5.3/32.jpg" srcset="/img/loading.gif" lazyload alt="Yolov5l网络结构"></p>
-<h3 id="Yolov5x网络结构"><a href="#Yolov5x网络结构" class="headerlink" title="Yolov5x网络结构"></a>Yolov5x网络结构</h3><p><img src="/img/5.3/33.jpg" srcset="/img/loading.gif" lazyload alt="Yolov5x网络结构"></p>
+<p><img src="/img/5.3/30.png" srcset="/img/loading.gif" lazyload alt="Yolov5s网络结构"></p>
+<h3 id="Yolov5m网络结构"><a href="#Yolov5m网络结构" class="headerlink" title="Yolov5m网络结构"></a>Yolov5m网络结构</h3><p><img src="/img/5.3/31.png" srcset="/img/loading.gif" lazyload alt="Yolov5m网络结构"></p>
+<h3 id="Yolov5l网络结构"><a href="#Yolov5l网络结构" class="headerlink" title="Yolov5l网络结构"></a>Yolov5l网络结构</h3><p><img src="/img/5.3/32.png" srcset="/img/loading.gif" lazyload alt="Yolov5l网络结构"></p>
+<h3 id="Yolov5x网络结构"><a href="#Yolov5x网络结构" class="headerlink" title="Yolov5x网络结构"></a>Yolov5x网络结构</h3><p><img src="/img/5.3/33.png" srcset="/img/loading.gif" lazyload alt="Yolov5x网络结构"></p>
 <h1 id="核心基础内容"><a href="#核心基础内容" class="headerlink" title="核心基础内容"></a>核心基础内容</h1><h2 id="Yolov3-amp-Yolov4网络结构图"><a href="#Yolov3-amp-Yolov4网络结构图" class="headerlink" title="Yolov3&amp;Yolov4网络结构图"></a>Yolov3&amp;Yolov4网络结构图</h2><h3 id="Yolov3网络结构图"><a href="#Yolov3网络结构图" class="headerlink" title="Yolov3网络结构图"></a>Yolov3网络结构图</h3><p>Yolov3的网络结构是比较经典的one-stage结构，分为输入端、Backbone、Neck和Prediction四个部分。</p>
 <p>先放上YOLOv3的网络结构图</p>
 <p><img src="/img/5.3/34.jpg" srcset="/img/loading.gif" lazyload alt="YOLOv3的网络结构图"></p>
@@ -393,19 +393,19 @@ v=\frac{4}{\pai^2}(arctan \frac{w^{gt}}{h^{gt}}-arctan \frac{w^p}{h^p})^2</scrip
 <h3 id="四种结构的参数"><a href="#四种结构的参数" class="headerlink" title="四种结构的参数"></a>四种结构的参数</h3><ol>
 <li>Yolov5s.yaml</li>
 </ol>
-<p><img src="/img/5.3/52.jpg" srcset="/img/loading.gif" lazyload alt="Yolov5s.yaml"></p>
+<p><img src="/img/5.3/52.png" srcset="/img/loading.gif" lazyload alt="Yolov5s.yaml"></p>
 <ol>
 <li>Yolov5m.yaml</li>
 </ol>
-<p><img src="/img/5.3/53.jpg" srcset="/img/loading.gif" lazyload alt="Yolov5m.yaml"></p>
+<p><img src="/img/5.3/53.png" srcset="/img/loading.gif" lazyload alt="Yolov5m.yaml"></p>
 <ol>
 <li>Yolov5l.yaml</li>
 </ol>
-<p><img src="/img/5.3/54.jpg" srcset="/img/loading.gif" lazyload alt="Yolov5l.yaml"></p>
+<p><img src="/img/5.3/54.png" srcset="/img/loading.gif" lazyload alt="Yolov5l.yaml"></p>
 <ol>
 <li>Yolov5x.yaml</li>
 </ol>
-<p><img src="/img/5.3/55.jpg" srcset="/img/loading.gif" lazyload alt="Yolov5x.yaml"></p>
+<p><img src="/img/5.3/55.png" srcset="/img/loading.gif" lazyload alt="Yolov5x.yaml"></p>
 <p>四种结构就是通过上面的两个参数，来进行控制网络的深度和宽度。其中depth_multiple控制网络的深度，width_multiple控制网络的宽度。</p>
 <h3 id="Yolov5网络结构"><a href="#Yolov5网络结构" class="headerlink" title="Yolov5网络结构"></a>Yolov5网络结构</h3><p>四种结构的yaml文件中，下方的网络架构代码都是一样的。</p>
 <p>为了便于讲解，大白将其中的Backbone部分提取出来，讲解如何控制网络的宽度和深度，yaml文件中的Head部分也是同样的原理。</p>
